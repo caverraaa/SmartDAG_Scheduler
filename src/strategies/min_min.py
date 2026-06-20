@@ -7,9 +7,9 @@ from src.strategies.base import BaseSchedulingStrategy
 class MinMinStrategy(BaseSchedulingStrategy):
     def predict(self, ready: list[int], state: ClusterState) -> tuple[int, int]:
         best: tuple[float, int, int] | None = None  # (finish, task_id, node_id)
-        for task_id in ready:
+        for task_id in sorted(ready):
             task = state.dag.task(task_id)
-            for node in state.nodes:
+            for node in sorted(state.nodes, key=lambda n: n.node_id):
                 if not node.alive:
                     continue
                 _, finish = earliest_start_finish(task, node, state)

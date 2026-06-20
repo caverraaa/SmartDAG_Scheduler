@@ -31,6 +31,16 @@ def test_min_min_first_pick_is_smallest_task() -> None:
     assert (task_id, node_id) == (0, 0)
 
 
+def test_min_min_tie_break_independent_of_input_order() -> None:
+    dag, nodes = _independent()
+    env = ClusterEnv(load_config("config.yaml"))
+    env.reset(dag=dag, nodes=nodes)
+    # Call with ready tasks in reversed order [2, 1, 0]
+    task_id, node_id = MinMinStrategy().predict([2, 1, 0], env.state)
+    # Must still return task 0 on node 0 (proves tie-break is self-contained)
+    assert (task_id, node_id) == (0, 0)
+
+
 def test_min_min_full_schedule_golden() -> None:
     dag, nodes = _independent()
     env = ClusterEnv(load_config("config.yaml"))
