@@ -1,3 +1,4 @@
+import pytest
 import torch
 
 from src.rl.obs_tensors import ObsTensors
@@ -47,10 +48,21 @@ def test_gae_resets_across_episode_boundary() -> None:
     buf.compute_gae(gamma=1.0, lam=0.95)
     assert abs(buf.advantages[0] - (2.0 - 1.0)) < 1e-6
     assert abs(buf.advantages[1] - (5.0 - 0.0)) < 1e-6
+    # returns = advantage + value
+    assert abs(buf.returns[0] - 2.0) < 1e-6  # (2.0 - 1.0) + 1.0 = 2.0
+    assert abs(buf.returns[1] - 5.0) < 1e-6  # (5.0 - 0.0) + 0.0 = 5.0
 
 
 def test_clear() -> None:
     buf = RolloutBuffer()
     buf.add(_stub_obs(), 0, 0, log_prob=0.0, value=0.0, reward=0.0, done=True)
     buf.clear()
-    assert len(buf) == 0 and buf.advantages is None
+    assert len(buf) == 0 and buf.advantages is None and buf.returns is None
+
+
+def test_compute_gae_requires_terminal_last_transition() -> None:
+    # compute_gae must not be called with a non-terminal last transition.
+    buf = RolloutBuffer()
+    buf.add(_stub_obs(), 0, 0, log_prob=-0.5, value=1.0, reward=2.0, done=False)
+    with pytest.raises(ValueError, match="the last transition must have done=True"):
+        buf.compute_gae()

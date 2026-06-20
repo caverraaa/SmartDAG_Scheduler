@@ -43,6 +43,10 @@ class RolloutBuffer:
 
     def compute_gae(self, gamma: float = 1.0, lam: float = 0.95) -> None:
         n = len(self.transitions)
+        if n > 0 and not self.transitions[-1].done:
+            raise ValueError(
+                "compute_gae: the last transition must have done=True (complete episodes only)"
+            )
         advantages = [0.0] * n
         adv = 0.0
         for t in reversed(range(n)):
