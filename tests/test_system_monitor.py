@@ -5,6 +5,8 @@ from src.core.dag import TaskDAG
 from src.core.task import Task, TaskClass
 from src.env.cluster_env import ClusterEnv
 from src.scheduler.system_monitor import SystemMonitor
+from src.scheduler.task_scheduler import run_episode
+from src.strategies.heft import HEFTStrategy
 from src.utils.config import load_config
 
 
@@ -41,3 +43,24 @@ def test_monitor_notifies_subscribers() -> None:
     env.step((0, 1))
     monitor.check(env.state)
     assert seen == [1]
+
+
+def test_run_episode_terminates_gracefully_on_total_deadlock() -> None:
+    """Verify run_episode returns without raising when all nodes die and deadlock occurs.
+
+    This test validates that:
+    1. run_episode does NOT raise AssertionError when env.schedule might be accessed
+    2. The episode detects and returns the deadlock state gracefully
+    3. The returned info dict contains deadlocked=True
+    4. Not all tasks are scheduled (proving the deadlock occurred)
+    """
+    cfg = replace(load_config("config.yaml"), failure_rate=1e6)
+    env = ClusterEnv(cfg)
+    dag, nodes = _instance()
+    schedule, info = run_episode(env, HEFTStrategy(), dag=dag, nodes=nodes)
+    # run_episode should return without raising
+    assert schedule is not None
+    # Check that deadlock was detected
+    assert info.get("deadlocked") is True
+    # Not all 4 tasks should be completed due to deadlock
+    assert len(schedule.assignments) < 4
