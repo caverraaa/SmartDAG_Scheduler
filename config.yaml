@@ -38,3 +38,18 @@ wfcommons:
   mem_min: 1.0              # rescale floor for mem_required (matches synthetic ~1-8)
   mem_max: 8.0              # rescale ceiling for mem_required
   memory_ref_bytes: 8.0e9   # memoryInBytes that maps to mem_max
+
+# M5 evaluation grid. Smoke-sized defaults; full thesis grid values in comments.
+eval:
+  noise_std: [0.0, 0.1, 0.2]
+  beta: [2.0, 5.0, 10.0]
+  failure_rate: 0.0          # the "on" value when failures enabled; 0.0 => failures-on is a no-op
+  failures: [false, true]
+  n_dags: 5                  # full: 30-50
+  dag_sizes: [20, 40, 60]    # sampled (round-robin) for held-out synthetic DAGs
+  n_nodes: 8
+  noise_seeds: [0, 1, 2]     # full: 5-10 distinct seeds
+  dag_seed_base: 100000      # held-out stream offset (disjoint from training seeds)
+  benchmark_dir: dag_benchmarks
+  checkpoint_glob: models/rl_seed*.pth
+  results_dir: results
