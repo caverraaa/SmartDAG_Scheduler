@@ -48,3 +48,18 @@ def test_reset_samples_from_config_when_no_override() -> None:
     obs, info = env.reset()
     assert obs.task_features.shape[0] == 30  # n_tasks from config
     assert obs.node_features.shape[0] == 8  # n_nodes from config
+
+
+def test_reset_guards_against_degenerate_e_ref() -> None:
+    """Verify reset() raises ValueError if e_ref would be zero or negative."""
+    env = ClusterEnv(load_config("config.yaml"))
+    dag, nodes = _golden_instance()
+    # Set all nodes' power_w to 0.0 so every task's minimum energy is 0 -> e_ref == 0
+    nodes[0].power_w = 0.0
+    nodes[1].power_w = 0.0
+    try:
+        env.reset(dag=dag, nodes=nodes)
+        raise AssertionError("expected ValueError for degenerate e_ref == 0")
+    except ValueError as e:
+        assert "Degenerate instance" in str(e)
+        assert "e_ref=0.0" in str(e)

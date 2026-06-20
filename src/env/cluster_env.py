@@ -63,6 +63,11 @@ class ClusterEnv:
 
         m_ref = self._compute_m_ref(dag, nodes)
         e_ref = self._compute_e_ref(dag, nodes)
+        if m_ref <= 0.0 or e_ref <= 0.0:
+            raise ValueError(
+                f"Degenerate instance: m_ref={m_ref}, e_ref={e_ref} must both be > 0 "
+                f"(zero would make the normalized reward divide by zero)."
+            )
         self.state = ClusterState(
             nodes=nodes, dag=dag, task_finish={}, task_node={}, m_ref=m_ref, e_ref=e_ref
         )
@@ -73,6 +78,19 @@ class ClusterEnv:
         return obs, info
 
     def step(self, action: tuple[int, int]) -> tuple[Observation, float, bool, dict]:
+        """Execute one scheduling step (task assignment to node).
+
+        Returns the simplified 4-tuple (obs, reward, done, info) per spec §5.3.
+        This is a finite-horizon γ=1 episodic MDP; done means terminated
+        (truncated is never used). The M3a PPO rollout buffer should bootstrap
+        accordingly (no value bootstrap past a terminated state).
+
+        Args:
+            action: (task_id, node_id) tuple.
+
+        Returns:
+            (obs, reward, done, info): 4-tuple where done=True when all tasks scheduled.
+        """
         if self.state is None or self.schedule is None:
             raise RuntimeError("Call reset() before step().")
         task_id, node_id = action
