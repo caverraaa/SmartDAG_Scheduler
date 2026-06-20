@@ -15,3 +15,17 @@ n_layers: 6
 # Stochasticity (deterministic in M1)
 noise_std: 0.0
 failure_rate: 0.0
+
+# RL / PPO (M3b). gamma is pinned to 1.0 in the trainer (telescoping reward).
+lr: 0.0003
+clip_eps: 0.2
+gae_lambda: 0.95
+ppo_epochs: 4
+minibatch_size: 32
+entropy_coef: 0.01
+value_coef: 0.5
+rollout_episodes: 4
+total_updates: 50
+max_grad_norm: 0.5
+gnn_hidden: 64
+gnn_layers: 2
