@@ -27,6 +27,8 @@ def run_episode(
     while not done:
         if monitor is not None:
             monitor.check(env.state)
+        if not any(n.alive for n in env.state.nodes):
+            break  # deadlock: no surviving node can run the remaining tasks
         ready = env.state.dag.ready_set(env.scheduled)
         action = strategy.predict(ready, env.state)
         _, _, done, info = env.step(action)

@@ -1,5 +1,7 @@
 """Gymnasium-style decision-point environment (TZ §5.3, §6.4, Appendix A)."""
 
+import zlib
+
 from src.core.compute_node import ComputeNode
 from src.core.dag import TaskDAG
 from src.core.schedule import Assignment, Schedule
@@ -9,7 +11,7 @@ from src.env.cost_model import energy, exec_time
 from src.env.observation import Observation, build_observation
 from src.env.placement import ClusterState, earliest_start_finish, weighted_cost
 from src.utils.config import Config
-from src.utils.seeding import make_rng
+from src.utils.seeding import derive_rng, make_rng
 
 
 class ClusterEnv:
@@ -19,6 +21,23 @@ class ClusterEnv:
         self.state: ClusterState | None = None
         self.schedule: Schedule | None = None
         self.scheduled: set[int] = set()
+
+    @staticmethod
+    def _instance_signature(dag: TaskDAG, nodes: list[ComputeNode]) -> int:
+        """Deterministic crc32 over the instance, so the calendar is keyed to it."""
+        parts: list[str] = []
+        for tid in range(dag.n_tasks):
+            t = dag.task(tid)
+            parts.append(f"t{tid}:{t.base_cost!r}:{t.mem_required!r}:{t.task_class.value}")
+        for u, v in dag.edge_index():
+            parts.append(f"e{u}-{v}:{dag.edge_data(u, v)!r}")
+        for n in nodes:
+            speeds = ",".join(
+                f"{c.value}={n.speed_by_class[c]!r}"
+                for c in sorted(n.speed_by_class, key=lambda c: c.value)
+            )
+            parts.append(f"n{n.node_id}:{n.node_type.value}:{n.power_w!r}:{n.bandwidth!r}:{speeds}")
+        return zlib.crc32("|".join(parts).encode("utf-8"))
 
     @staticmethod
     def _compute_m_ref(dag: TaskDAG, nodes: list[ComputeNode]) -> float:
@@ -68,8 +87,31 @@ class ClusterEnv:
                 f"Degenerate instance: m_ref={m_ref}, e_ref={e_ref} must both be > 0 "
                 f"(zero would make the normalized reward divide by zero)."
             )
+        sig = self._instance_signature(dag, nodes)
+        noise_rng = derive_rng(self.config.seed, f"noise|{sig}")
+        fail_rng = derive_rng(self.config.seed, f"failure|{sig}")
+        if self.config.noise_std > 0.0:
+            noise_eps = {
+                tid: float(noise_rng.normal(0.0, self.config.noise_std))
+                for tid in range(dag.n_tasks)
+            }
+        else:
+            noise_eps = {tid: 0.0 for tid in range(dag.n_tasks)}
+        if self.config.failure_rate > 0.0:
+            scale = 1.0 / self.config.failure_rate
+            failure_times = {n.node_id: float(fail_rng.exponential(scale)) for n in nodes}
+        else:
+            failure_times = {n.node_id: float("inf") for n in nodes}
+
         self.state = ClusterState(
-            nodes=nodes, dag=dag, task_finish={}, task_node={}, m_ref=m_ref, e_ref=e_ref
+            nodes=nodes,
+            dag=dag,
+            task_finish={},
+            task_node={},
+            m_ref=m_ref,
+            e_ref=e_ref,
+            failure_times=failure_times,
+            noise_eps=noise_eps,
         )
         self.schedule = Schedule(n_nodes=len(nodes))
         self.scheduled = set()
@@ -78,18 +120,12 @@ class ClusterEnv:
         return obs, info
 
     def step(self, action: tuple[int, int]) -> tuple[Observation, float, bool, dict]:
-        """Execute one scheduling step (task assignment to node).
+        """One assignment. Returns the 4-tuple (obs, reward, done, info) per spec §5.3.
 
-        Returns the simplified 4-tuple (obs, reward, done, info) per spec §5.3.
-        This is a finite-horizon γ=1 episodic MDP; done means terminated
-        (truncated is never used). The M3a PPO rollout buffer should bootstrap
-        accordingly (no value bootstrap past a terminated state).
-
-        Args:
-            action: (task_id, node_id) tuple.
-
-        Returns:
-            (obs, reward, done, info): 4-tuple where done=True when all tasks scheduled.
+        Planning (reward, weighted_cost, observation) is on NOMINAL costs; the actual
+        noisy duration is revealed only at commit. A placement fails iff its actual
+        finish exceeds the node's exogenous failure time t_f (the node then dies and the
+        task is requeued, reward 0). done=True at full completion or deadlock.
         """
         if self.state is None or self.schedule is None:
             raise RuntimeError("Call reset() before step().")
@@ -106,31 +142,56 @@ class ClusterEnv:
             raise ValueError(f"Task {task_id} is not ready")
 
         task = state.dag.task(task_id)
-        components = weighted_cost(task, node, state)
+        components = weighted_cost(task, node, state)  # NOMINAL planning
+        start, nominal_finish = earliest_start_finish(task, node, state)
+        eps = state.noise_eps.get(task_id, 0.0)
+        actual_exec = max(0.0, (nominal_finish - start) * (1.0 + eps))
+        actual_finish = start + actual_exec
+
+        t_f = state.failure_times.get(node_id, float("inf"))
+        if actual_finish > t_f:
+            # Node dies before this task could finish: task lost (requeued), nothing committed.
+            node.alive = False
+            remaining = state.dag.n_tasks - len(self.scheduled)
+            deadlocked = remaining > 0 and not any(n.alive for n in state.nodes)
+            makespan = self.schedule.makespan()
+            info: dict = {
+                "m_ref": state.m_ref,
+                "e_ref": state.e_ref,
+                "makespan": makespan,
+                "energy": self.schedule.total_energy,
+                "failed_node": node_id,
+                "deadlocked": deadlocked,
+            }
+            if deadlocked:
+                alive_ids = [n.node_id for n in state.nodes if n.alive]
+                info["balance"] = self.schedule.load_balance_index(alive_ids)
+            obs = build_observation(state, self.scheduled, current_makespan=makespan)
+            return obs, 0.0, deadlocked, info
+
+        # Success: reward is nominal; commit uses the actual (noisy) finish/energy.
         reward = -(
             self.config.w1 * components.d_makespan_norm + self.config.w2 * components.d_energy_norm
         )
-
-        start, finish = earliest_start_finish(task, node, state)
-        step_energy = energy(task, node)
-        node.free_at_time = finish
-        state.task_finish[task_id] = finish
+        actual_energy = node.power_w * actual_exec
+        node.free_at_time = actual_finish
+        state.task_finish[task_id] = actual_finish
         state.task_node[task_id] = node_id
-        state.sim_time = max(state.sim_time, finish)
-        self.schedule.add(Assignment(task_id, node_id, start, finish), energy=step_energy)
+        state.sim_time = max(state.sim_time, actual_finish)
+        self.schedule.add(Assignment(task_id, node_id, start, actual_finish), energy=actual_energy)
         self.scheduled.add(task_id)
 
         done = len(self.scheduled) == state.dag.n_tasks
         makespan = self.schedule.makespan()
-        info: dict = {
+        info = {
             "m_ref": state.m_ref,
             "e_ref": state.e_ref,
             "makespan": makespan,
             "energy": self.schedule.total_energy,
         }
         if done:
-            n_alive = sum(1 for n in state.nodes if n.alive)
-            balance = self.schedule.load_balance_index(n_alive)
+            alive_ids = [n.node_id for n in state.nodes if n.alive]
+            balance = self.schedule.load_balance_index(alive_ids)
             reward += self.config.w3 * balance
             info["balance"] = balance
 
