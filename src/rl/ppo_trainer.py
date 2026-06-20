@@ -109,6 +109,8 @@ class PPOTrainer:
         return history
 
     def evaluate_vs_heft(self, env: ClusterEnv, instances: list[tuple]) -> dict[str, float]:
+        if not instances:
+            raise ValueError("evaluate_vs_heft requires at least one instance.")
         rl_makespans: list[float] = []
         heft_makespans: list[float] = []
         rl_strategy = RLStrategy(self.policy)
