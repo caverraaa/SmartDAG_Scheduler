@@ -7,11 +7,10 @@ through the parser. Requires `pip install wfcommons`.
 import numpy as np
 import pytest
 
-wfcommons = pytest.importorskip("wfcommons")
-
 
 @pytest.mark.wfcommons
 def test_live_recipe_parses(tmp_path) -> None:
+    pytest.importorskip("wfcommons")
     from tools.gen_wfcommons import generate
 
     path = generate(recipe="montage", n_tasks=20, seed=42, out_dir=str(tmp_path))
