@@ -1,9 +1,13 @@
 """From-scratch PPO Actor-Critic trainer (TZ §6.5, §9). gamma pinned to 1.0."""
 
+import os
+
 import torch
 from torch.nn.utils import clip_grad_norm_
 from torch.optim import Adam
 
+from src.env.cluster_env import ClusterEnv
+from src.rl.obs_tensors import obs_to_tensors
 from src.rl.policy import TwoHeadPolicy
 from src.rl.rollout_buffer import RolloutBuffer
 from src.utils.config import Config
@@ -63,3 +67,30 @@ class PPOTrainer:
                 totals["total_loss"] += total.item()
                 n_batches += 1
         return {k: v / n_batches for k, v in totals.items()}
+
+    def collect_rollouts(
+        self,
+        env: ClusterEnv,
+        n_episodes: int,
+        dag=None,
+        nodes=None,
+    ) -> RolloutBuffer:
+        buffer = RolloutBuffer()
+        with torch.no_grad():
+            for _ in range(n_episodes):
+                obs, _info = env.reset(dag=dag, nodes=nodes)
+                done = False
+                while not done:
+                    t = obs_to_tensors(obs)
+                    (task_id, node_id), log_prob, value = self.policy.act_from_tensors(t)
+                    obs, reward, done, _info = env.step((task_id, node_id))
+                    buffer.add(t, task_id, node_id, log_prob.item(), value.item(), reward, done)
+        buffer.compute_gae(gamma=GAMMA, lam=self.config.gae_lambda)
+        return buffer
+
+    def save_checkpoint(self, path: str) -> None:
+        os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+        torch.save(self.policy.state_dict(), path)
+
+    def load_checkpoint(self, path: str) -> None:
+        self.policy.load_state_dict(torch.load(path))
