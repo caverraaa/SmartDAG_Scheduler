@@ -16,7 +16,7 @@ def test_base_costs_are_heavy_tailed_not_uniform() -> None:
     dag = generate_synthetic(make_rng(1), n_tasks=60, n_layers=8, edge_prob=0.4, ccr=0.5)
     costs = np.array([dag.task(i).base_cost for i in range(dag.n_tasks)])
     # heavy-tailed: coefficient of variation clearly above a uniform spread
-    assert costs.std() / costs.mean() > 0.3
+    assert costs.std() / costs.mean() > 0.5
     assert costs.min() > 0.0
 
 
