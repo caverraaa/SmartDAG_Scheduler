@@ -9,7 +9,10 @@ from torch.optim import Adam
 from src.env.cluster_env import ClusterEnv
 from src.rl.obs_tensors import obs_to_tensors
 from src.rl.policy import TwoHeadPolicy
+from src.rl.rl_strategy import RLStrategy
 from src.rl.rollout_buffer import RolloutBuffer
+from src.scheduler.task_scheduler import run_episode
+from src.strategies.heft import HEFTStrategy
 from src.utils.config import Config
 
 GAMMA = 1.0
@@ -87,6 +90,37 @@ class PPOTrainer:
                     buffer.add(t, task_id, node_id, log_prob.item(), value.item(), reward, done)
         buffer.compute_gae(gamma=GAMMA, lam=self.config.gae_lambda)
         return buffer
+
+    def train(
+        self,
+        env: ClusterEnv,
+        n_updates: int,
+        dag=None,
+        nodes=None,
+    ) -> list[dict[str, float]]:
+        history: list[dict[str, float]] = []
+        for _ in range(n_updates):
+            buffer = self.collect_rollouts(env, self.config.rollout_episodes, dag=dag, nodes=nodes)
+            n_episodes = sum(1 for tr in buffer.transitions if tr.done)
+            total_reward = sum(tr.reward for tr in buffer.transitions)
+            stats = self.update(buffer)
+            stats["mean_reward"] = total_reward / max(1, n_episodes)
+            history.append(stats)
+        return history
+
+    def evaluate_vs_heft(self, env: ClusterEnv, instances: list[tuple]) -> dict[str, float]:
+        rl_makespans: list[float] = []
+        heft_makespans: list[float] = []
+        rl_strategy = RLStrategy(self.policy)
+        for dag, nodes in instances:
+            _s, rl_info = run_episode(env, rl_strategy, dag=dag, nodes=nodes)
+            _s, heft_info = run_episode(env, HEFTStrategy(), dag=dag, nodes=nodes)
+            rl_makespans.append(rl_info["makespan"])
+            heft_makespans.append(heft_info["makespan"])
+        return {
+            "rl_makespan": sum(rl_makespans) / len(rl_makespans),
+            "heft_makespan": sum(heft_makespans) / len(heft_makespans),
+        }
 
     def save_checkpoint(self, path: str) -> None:
         os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
