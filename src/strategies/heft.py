@@ -25,8 +25,8 @@ class HEFTStrategy(BaseSchedulingStrategy):
 
     def predict(self, ready: list[int], state: ClusterState) -> tuple[int, int]:
         ranks = self._ranks(state)
-        task_id = max(ready, key=lambda t: ranks[t])  # ties -> lowest id (ready is sorted)
+        task_id = max(ready, key=lambda t: (ranks[t], -t))  # highest rank, then lowest id
         task = state.dag.task(task_id)
         alive = [n for n in state.nodes if n.alive]
-        node = min(alive, key=lambda n: earliest_start_finish(task, n, state)[1])
+        node = min(alive, key=lambda n: (earliest_start_finish(task, n, state)[1], n.node_id))
         return task_id, node.node_id

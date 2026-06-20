@@ -49,3 +49,27 @@ def test_cpop_full_schedule_golden() -> None:
     # CP {0,1,3} -> GPU(1); non-CP t2 -> EFT picks CPU(0)
     assert node_of == {0: 1, 1: 1, 2: 0, 3: 1}
     assert info["makespan"] == 6.0
+
+
+def test_cpop_tie_break_selects_lowest_id() -> None:
+    """Test that equal-priority tasks are resolved by lowest id, independent of input order."""
+    # Two independent entry tasks with identical cost => equal priority
+    tasks = [
+        Task(0, 3.0, 1.0, TaskClass.SEQUENTIAL),
+        Task(1, 3.0, 1.0, TaskClass.SEQUENTIAL),
+    ]
+    dag = TaskDAG(tasks, [])  # no edges
+    nodes = [
+        ComputeNode(0, NodeType.CPU, {tc: 1.0 for tc in TaskClass}, 100.0, 10.0),
+        ComputeNode(1, NodeType.GPU, {tc: 2.0 for tc in TaskClass}, 200.0, 10.0),
+    ]
+    env = ClusterEnv(load_config("config.yaml"))
+    env.reset(dag=dag, nodes=nodes)
+
+    # Both ready, equal priority => should pick task 0 (lowest id)
+    task_id, _ = CPOPStrategy().predict([0, 1], env.state)
+    assert task_id == 0
+
+    # Reverse order in ready list => should still pick task 0 (regression guard)
+    task_id, _ = CPOPStrategy().predict([1, 0], env.state)
+    assert task_id == 0

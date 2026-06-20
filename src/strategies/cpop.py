@@ -27,7 +27,7 @@ def critical_path_processor(dag: TaskDAG, cp: set[int], nodes: list[ComputeNode]
     def cp_cost(node: ComputeNode) -> float:
         return sum(exec_time(dag.task(i), node) for i in cp)
 
-    return min(nodes, key=cp_cost).node_id
+    return min(nodes, key=lambda n: (cp_cost(n), n.node_id)).node_id
 
 
 class CPOPStrategy(BaseSchedulingStrategy):
@@ -50,10 +50,10 @@ class CPOPStrategy(BaseSchedulingStrategy):
 
     def predict(self, ready: list[int], state: ClusterState) -> tuple[int, int]:
         priority, cp, cp_proc = self._structure(state)
-        task_id = max(ready, key=lambda t: priority[t])  # ties -> lowest id
+        task_id = max(ready, key=lambda t: (priority[t], -t))  # highest priority, then lowest id
         if task_id in cp:
             return task_id, cp_proc
         task = state.dag.task(task_id)
         alive = [n for n in state.nodes if n.alive]
-        node = min(alive, key=lambda n: earliest_start_finish(task, n, state)[1])
+        node = min(alive, key=lambda n: (earliest_start_finish(task, n, state)[1], n.node_id))
         return task_id, node.node_id
