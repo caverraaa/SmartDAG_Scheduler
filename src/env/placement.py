@@ -1,6 +1,6 @@
 """The single side-effect-free objective evaluator (TZ Appendix A.1/A.2)."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from src.core.compute_node import ComputeNode
 from src.core.dag import TaskDAG
@@ -17,6 +17,8 @@ class ClusterState:
     m_ref: float
     e_ref: float
     sim_time: float = 0.0
+    failure_times: dict[int, float] = field(default_factory=dict)
+    noise_eps: dict[int, float] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -26,9 +28,12 @@ class CostComponents:
 
 
 def horizon(nodes: list[ComputeNode]) -> float:
-    """Running schedule horizon = max free_at_time over alive nodes."""
-    alive = [n.free_at_time for n in nodes if n.alive]
-    return max(alive) if alive else 0.0
+    """Running schedule horizon = max free_at_time over ALL nodes with committed work.
+
+    Dead nodes are included: their completed tasks still elapsed and count toward the
+    makespan. Placement candidates are filtered to alive nodes by the strategies/env.
+    """
+    return max((n.free_at_time for n in nodes), default=0.0)
 
 
 def earliest_start_finish(
