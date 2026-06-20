@@ -129,8 +129,8 @@ class ClusterEnv:
             "energy": self.schedule.total_energy,
         }
         if done:
-            n_alive = sum(1 for n in state.nodes if n.alive)
-            balance = self.schedule.load_balance_index(n_alive)
+            alive_node_ids = [n.node_id for n in state.nodes if n.alive]
+            balance = self.schedule.load_balance_index(alive_node_ids)
             reward += self.config.w3 * balance
             info["balance"] = balance
 

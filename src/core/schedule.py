@@ -30,15 +30,16 @@ class Schedule:
             busy[a.node_id] = busy.get(a.node_id, 0.0) + (a.finish - a.start)
         return busy
 
-    def load_balance_index(self, n_alive_nodes: int) -> float:
-        """1 - CV(busy time) over all alive nodes; idle nodes count as 0."""
-        if n_alive_nodes <= 0:
+    def load_balance_index(self, alive_node_ids: list[int]) -> float:
+        """1 - CV(busy time) over the given alive node ids; idle nodes count as 0."""
+        if not alive_node_ids:
             return 0.0
         busy = self.busy_time_by_node()
-        times = [busy.get(i, 0.0) for i in range(n_alive_nodes)]
-        mean = sum(times) / n_alive_nodes
+        times = [busy.get(i, 0.0) for i in alive_node_ids]
+        k = len(alive_node_ids)
+        mean = sum(times) / k
         if mean == 0.0:
             return 1.0  # nothing scheduled yet: treat as perfectly even
-        variance = sum((t - mean) ** 2 for t in times) / n_alive_nodes
+        variance = sum((t - mean) ** 2 for t in times) / k
         cv = (variance**0.5) / mean
         return max(0.0, min(1.0, 1.0 - cv))
