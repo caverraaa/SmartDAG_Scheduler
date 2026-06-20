@@ -1,0 +1,41 @@
+# .cursorrules — SmartDAG Scheduler
+ 
+Research-grade, CLI-only ПМК: trains a Deep RL DAG-scheduling agent on simulated heterogeneous clusters, benchmarks it against classical heuristics on identical instances, emits metrics for a thesis. Full design spec: `SmartDAG_Scheduler_TZ.md` — read it before non-trivial work.
+ 
+## Scientific claim (anti-drift anchor)
+RL does NOT win everything. It wins (a) structurally on multi-criteria objectives — heuristics ignore energy + load balance — and (b) empirically on robustness under execution-time noise and node failures. If a change would weaken, bypass, or pre-bias this claim, stop and flag it instead of proceeding.
+ 
+## Tech stack
+Python 3.10+. Core: PyTorch, PyTorch Geometric (PyG — NOT DGL), NetworkX, Gymnasium, WfCommons, NumPy, pandas. Tests: pytest. Lint/format: ruff + black. Full type hints everywhere.
+ 
+## Context7 — pull live docs before using any library API
+When you touch a library's API, fetch docs via Context7 first: call `resolve-library-id` for the library name, then `get-library-docs` with a focused topic. Always resolve first (IDs can change). Canonical IDs:
+- PyTorch → `/pytorch/pytorch` (autograd, nn, optim, save/load)
+- PyTorch Geometric → `/pyg-team/pytorch_geometric` (SAGEConv, message passing, Data/Batch, pooling)
+- Gymnasium → `/farama-foundation/gymnasium` (Env API, reset/step, spaces, wrappers)
+- NetworkX → `/networkx/networkx` (DiGraph, DAG checks, longest_path, topological_sort)
+- WfCommons → `/wfcommons/wfcommons` (WfFormat, Recipe, workflow generation)
+- NumPy → `/numpy/numpy`; pandas → `/pandas-dev/pandas`; pytest → `/pytest-dev/pytest`
+Pin lookups to the installed version (check `pyproject.toml`/lockfile); PyG and Gymnasium have breaking changes across minor versions.
+ 
+## Hard invariants — NEVER violate (this is the thesis, not style)
+1. Fairness invariant: all strategies (RL + every heuristic) run on the SAME instances, SAME noise seed, SAME failure events, SAME Observer trigger, SAME `predict(ready, cluster_state) -> (task, node)` interface. Any path giving one strategy different instances/seeds/events/info than another is a bug, even if it improves results. Guarded by `tests/test_fairness.py`.
+2. Baselines stay authentic: HEFT, CPOP, Min-Min run faithfully as published. Do NOT bolt the agent's capabilities onto a heuristic. All baselines are full list-schedulers (choose ordering AND node); the agent's only edge is a LEARNED ordering policy, not extra action-space authority.
+3. Multi-criteria control = Weighted-Sum Greedy, optimizing the SAME per-step objective as the reward (`w1·Δmakespan/M_ref + w2·Δenergy/E_ref`, identical weights/references). Balance is terminal-only — measured, not chased.
+4. γ = 1.0 + reward telescoping: per-step reward telescopes exactly to total makespan/energy; terminal balance added once. No discounting, no per-step balance term.
+5. Reveal-at-completion noise: agent plans on nominal durations; noise ε revealed only at completion. Never leak realized durations into the observation.
+6. Determinism = `noise_std=0, failure_rate=0` on the same code path; reproducible, hand-checkable. Seed everything via `utils/seeding.py`.
+ 
+## Conventions
+- Respect layering: core → env → strategies → rl → scheduler → eval. No back-dependencies (e.g. `core` importing `rl`).
+- New strategies implement `BaseSchedulingStrategy`, drop-in behind `predict(ready, cluster_state) -> (task, node)`.
+- DAGs only via `DAGFactory` — never construct ad hoc in training/eval.
+- All hyperparams/experiment settings in `config.yaml`; no magic numbers in code.
+- TDD: failing test first. Keep green: `test_heft`, `test_cpop`, `test_min_min`, `test_reward_telescoping`, `test_env_step`, `test_masking`, `test_fairness`. Flat reward from step 0 = bug (reward scaling/masking/advantage), not "needs more training."
+- ruff + black clean; full type hints; no untyped public functions.
+ 
+## Non-goals — do NOT implement
+GUI/dashboard/Streamlit/web/REST/gRPC; database; Kubernetes/Mesos/MLflow; real-cluster execution; human-in-the-loop; task deadlines (no field, no reward term, no `w4`); DQN/PER/target networks (PPO Actor-Critic only); DGL (use PyG); fixed `Discrete` action space (use pointer scoring + masking); anything breaking the fairness invariant.
+ 
+## Default posture
+Prefer the smallest change that satisfies the spec. Over-engineering is a failure mode here. If a request pushes toward non-goals, capability-parity hacks on baselines, or weakening an invariant — pause and raise it.
