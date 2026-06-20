@@ -57,9 +57,9 @@ class PPOTrainer:
                 total.backward()
                 clip_grad_norm_(self.policy.parameters(), cfg.max_grad_norm)
                 self.optimizer.step()
-                totals["policy_loss"] += float(policy_loss)
-                totals["value_loss"] += float(value_loss)
-                totals["entropy"] += float(entropy_mean)
-                totals["total_loss"] += float(total)
+                totals["policy_loss"] += policy_loss.item()
+                totals["value_loss"] += value_loss.item()
+                totals["entropy"] += entropy_mean.item()
+                totals["total_loss"] += total.item()
                 n_batches += 1
         return {k: v / n_batches for k, v in totals.items()}

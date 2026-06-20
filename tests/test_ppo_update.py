@@ -9,7 +9,7 @@ from src.rl.obs_tensors import obs_to_tensors
 from src.rl.policy import TwoHeadPolicy
 from src.rl.ppo_trainer import PPOTrainer
 from src.rl.rollout_buffer import RolloutBuffer
-from src.utils.config import load_config
+from src.utils.config import Config, load_config
 
 
 def _instance() -> tuple[TaskDAG, list[ComputeNode]]:
@@ -27,7 +27,9 @@ def _instance() -> tuple[TaskDAG, list[ComputeNode]]:
     return dag, nodes
 
 
-def _collect_one_episode(policy: TwoHeadPolicy, env: ClusterEnv, dag, nodes) -> RolloutBuffer:
+def _collect_one_episode(
+    policy: TwoHeadPolicy, env: ClusterEnv, dag: TaskDAG, nodes: list[ComputeNode]
+) -> RolloutBuffer:
     buf = RolloutBuffer()
     obs, _ = env.reset(dag=dag, nodes=nodes)
     done = False
@@ -41,7 +43,7 @@ def _collect_one_episode(policy: TwoHeadPolicy, env: ClusterEnv, dag, nodes) -> 
     return buf
 
 
-def _setup():
+def _setup() -> tuple[Config, TwoHeadPolicy, ClusterEnv, TaskDAG, list[ComputeNode]]:
     torch.manual_seed(0)
     cfg = load_config("config.yaml")
     policy = TwoHeadPolicy(GNNEncoder(hidden=16, layers=2), hidden=16)
