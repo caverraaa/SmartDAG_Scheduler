@@ -8,9 +8,11 @@ per-instance scoring — never a fixed Discrete action space.
 
 import torch
 from torch import Tensor, nn
+from torch.distributions import Categorical
 
+from src.env.observation import Observation
 from src.rl.gnn_encoder import GNNEncoder
-from src.rl.obs_tensors import ObsTensors
+from src.rl.obs_tensors import ObsTensors, obs_to_tensors
 
 _NEG_INF = float("-inf")
 
@@ -45,3 +47,35 @@ class TwoHeadPolicy(nn.Module):
 
     def value(self, ctx: Tensor) -> Tensor:
         return self.critic(ctx).squeeze(-1)
+
+    def act(self, obs: Observation) -> tuple[tuple[int, int], Tensor, Tensor]:
+        t = obs_to_tensors(obs)
+        h, n_emb, ctx = self.encode(t)
+        task_dist = Categorical(logits=self.task_logits(h, ctx, t.ready_mask))
+        task_id = task_dist.sample()
+        node_dist = Categorical(logits=self.node_logits(h[task_id], n_emb, ctx, t.alive_mask))
+        node_id = node_dist.sample()
+        log_prob = task_dist.log_prob(task_id) + node_dist.log_prob(node_id)
+        return (int(task_id), int(node_id)), log_prob, self.value(ctx)
+
+    def evaluate_action(
+        self, obs: Observation, task_id: int, node_id: int
+    ) -> tuple[Tensor, Tensor, Tensor]:
+        t = obs_to_tensors(obs)
+        h, n_emb, ctx = self.encode(t)
+        task_dist = Categorical(logits=self.task_logits(h, ctx, t.ready_mask))
+        node_dist = Categorical(logits=self.node_logits(h[task_id], n_emb, ctx, t.alive_mask))
+        log_prob = task_dist.log_prob(torch.tensor(task_id)) + node_dist.log_prob(
+            torch.tensor(node_id)
+        )
+        # Use unmasked logits for entropy so gradients flow through head_task even
+        # when only one task is ready (masked entropy collapses to a constant 0 in
+        # that case, killing the gradient path through head_task).
+        all_ready = torch.ones_like(t.ready_mask)
+        all_alive = torch.ones_like(t.alive_mask)
+        task_entropy = Categorical(logits=self.task_logits(h, ctx, all_ready)).entropy()
+        node_entropy = Categorical(
+            logits=self.node_logits(h[task_id], n_emb, ctx, all_alive)
+        ).entropy()
+        entropy = task_entropy + node_entropy
+        return log_prob, entropy, self.value(ctx)
