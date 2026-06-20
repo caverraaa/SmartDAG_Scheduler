@@ -30,7 +30,7 @@ def test_obs_to_tensors_shapes_and_dtypes() -> None:
     assert t.task_features.shape == (4, 15) and t.task_features.dtype == torch.float32
     assert t.node_features.shape == (2, 9) and t.node_features.dtype == torch.float32
     assert t.edge_index.shape == (2, 4) and t.edge_index.dtype == torch.int64
-    assert t.globals.shape == (2,)
+    assert t.globals.shape == (2,) and t.globals.dtype == torch.float32
     assert t.ready_mask.dtype == torch.bool and t.ready_mask.shape == (4,)
     assert t.alive_mask.dtype == torch.bool and t.alive_mask.shape == (2,)
 
