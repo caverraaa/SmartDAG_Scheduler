@@ -126,3 +126,103 @@ def run_grid(
                                 }
                             )
     return pd.DataFrame(rows)
+
+
+# ---------------------------------------------------------------------------
+# Aggregation and output (Task 5)
+# ---------------------------------------------------------------------------
+
+_METRIC_COLS = [
+    "makespan",
+    "energy",
+    "utilisation",
+    "load_balance",
+    "slr",
+    "speedup",
+    "overhead_ms",
+]
+_REGIME_COLS = ["noise_std", "beta", "failures"]
+
+
+def summarize(df: pd.DataFrame) -> pd.DataFrame:
+    """Mean+std per (regime, strategy) for each metric, plus a robustness column."""
+    grouped = df.groupby([*_REGIME_COLS, "strategy"])
+    summary = grouped[_METRIC_COLS].agg(["mean", "std"])
+    summary.columns = [f"{metric}_{stat}" for metric, stat in summary.columns]
+    summary = summary.reset_index()
+    # robustness = mean over instances of (makespan std across noise seeds).
+    per_instance = (
+        df.groupby([*_REGIME_COLS, "strategy", "dag_label"])["makespan"].std().reset_index()
+    )
+    robustness = (
+        per_instance.groupby([*_REGIME_COLS, "strategy"])["makespan"]
+        .mean()
+        .reset_index()
+        .rename(columns={"makespan": "robustness"})
+    )
+    return summary.merge(robustness, on=[*_REGIME_COLS, "strategy"], how="left")
+
+
+def compare_significance(df: pd.DataFrame) -> pd.DataFrame:
+    """Per regime, each rl@* vs each non-RL baseline, paired on (dag_label, noise_seed)."""
+    from src.eval.significance import paired_wilcoxon
+
+    rl_names = sorted({s for s in df["strategy"].unique() if s.startswith("rl@")})
+    baseline_names = sorted({s for s in df["strategy"].unique() if not s.startswith("rl@")})
+    rows: list[dict] = []
+    for regime, sub in df.groupby(_REGIME_COLS):
+        for rl in rl_names:
+            rl_df = sub[sub["strategy"] == rl].set_index(["dag_label", "noise_seed"])
+            for base_name in baseline_names:
+                b_df = sub[sub["strategy"] == base_name].set_index(["dag_label", "noise_seed"])
+                common = rl_df.index.intersection(b_df.index)
+                a = [float(rl_df.loc[k, "makespan"]) for k in common]
+                b = [float(b_df.loc[k, "makespan"]) for k in common]
+                stat, p = paired_wilcoxon(a, b)
+                rows.append(
+                    {
+                        "noise_std": regime[0],
+                        "beta": regime[1],
+                        "failures": regime[2],
+                        "rl_strategy": rl,
+                        "baseline": base_name,
+                        "n_pairs": len(common),
+                        "wilcoxon_stat": stat,
+                        "p_value": p,
+                    }
+                )
+    return pd.DataFrame(rows)
+
+
+def write_results(
+    df: pd.DataFrame,
+    summary: pd.DataFrame,
+    significance: pd.DataFrame,
+    results_dir: str,
+) -> None:
+    """Write raw rows, summary, and significance CSVs to results_dir."""
+    os.makedirs(results_dir, exist_ok=True)
+    df.to_csv(os.path.join(results_dir, "eval_runs.csv"), index=False)
+    summary.to_csv(os.path.join(results_dir, "eval_summary.csv"), index=False)
+    significance.to_csv(os.path.join(results_dir, "eval_significance.csv"), index=False)
+
+
+def print_tables(summary: pd.DataFrame, significance: pd.DataFrame) -> None:
+    """Print one comparison table per regime followed by RL-vs-baseline p-values."""
+    for regime, sub in summary.groupby(_REGIME_COLS):
+        print(f"\n=== regime noise_std={regime[0]} beta={regime[1]} failures={regime[2]} ===")
+        cols = [
+            "strategy",
+            "makespan_mean",
+            "makespan_std",
+            "energy_mean",
+            "load_balance_mean",
+            "slr_mean",
+            "speedup_mean",
+            "overhead_ms_mean",
+            "robustness",
+        ]
+        print(sub[cols].to_string(index=False))
+    if not significance.empty:
+        print("\n=== RL vs baselines (Wilcoxon paired on makespan) ===")
+        print(significance.to_string(index=False))

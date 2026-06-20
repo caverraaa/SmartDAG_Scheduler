@@ -63,3 +63,30 @@ def test_run_grid_has_metric_columns() -> None:
         "strategy",
     ]:
         assert col in df.columns
+
+
+def test_summarize_and_significance_and_write(tmp_path) -> None:
+    from src.eval.evaluate import compare_significance, run_grid, summarize, write_results
+
+    base = load_config("config.yaml")
+    # Build a tiny grid with ONE fake checkpoint so the RL-vs-baseline path runs.
+    from src.rl.gnn_encoder import GNNEncoder
+    from src.rl.policy import TwoHeadPolicy
+
+    policy = TwoHeadPolicy(
+        GNNEncoder(hidden=base.gnn_hidden, layers=base.gnn_layers), hidden=base.gnn_hidden
+    )
+    df = run_grid(_eval_cfg(), base, checkpoints=[("rl_seed0", policy)])
+
+    summary = summarize(df)
+    assert {"makespan_mean", "makespan_std", "robustness"}.issubset(summary.columns)
+
+    sig = compare_significance(df)
+    assert {"rl_strategy", "baseline", "p_value", "n_pairs"}.issubset(sig.columns)
+    assert len(sig) >= 1  # at least one rl-vs-baseline comparison
+
+    write_results(df, summary, sig, str(tmp_path))
+    import os
+
+    for fname in ["eval_runs.csv", "eval_summary.csv", "eval_significance.csv"]:
+        assert os.path.exists(os.path.join(str(tmp_path), fname))
