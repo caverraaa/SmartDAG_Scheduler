@@ -1,9 +1,10 @@
 """Observation builder: per-task / per-node / global features + masks (TZ §6.2).
 
-No GNN consumes this in M1; it is validated structurally (shapes + masks). The
-graph/node pooled embeddings g,c are prepended to globals in M3a. Two feature
-normalizations are intentionally left raw here and fixed in M3a when the GNN
-exists: N_SPEED (node mean speed) and T_MEM (memory scale).
+Per-task and per-node features are normalized to O(1) scale for consumption by the
+GNN in M3a (graph/node pooled embeddings g,c are prepended to globals). Normalization
+rules: T_MEM/T_OUTDATA by task means, T_OUTDEG/T_UNSCHED_PREDS by n_tasks,
+N_SPEED/N_POWER by node means, N_UTIL clamped [0,1]. Unchanged: T_BASE_COST, T_COST_*,
+T_BLEVEL, T_TLEVEL, flags, masks, N_FREE_REL, globals.
 """
 
 from dataclasses import dataclass
@@ -84,6 +85,16 @@ def build_observation(
     cp = dag.critical_path_length() or 1.0
     ready = set(dag.ready_set(scheduled))
 
+    # Compute instance-wise means for normalization (eps-guarded with 1e-8)
+    mems = [dag.task(i).mem_required for i in range(n)]
+    mean_mem = (sum(mems) / n) + 1e-8 if n else 1.0
+    outs = [dag.out_data(i) for i in range(n)]
+    mean_out = (sum(outs) / n) + 1e-8 if n else 1.0
+    node_speeds = [float(np.mean(list(node.speed_by_class.values()))) for node in state.nodes]
+    mean_speed = (sum(node_speeds) / m) + 1e-8 if m else 1.0
+    mean_power = (sum(node.power_w for node in state.nodes) / m) + 1e-8 if m else 1.0
+    denom_tasks = float(n) if n else 1.0
+
     task_features = np.zeros((n, N_TASK_FEATURES), dtype=np.float32)
     ready_mask = np.zeros(n, dtype=bool)
     # one representative node per present type for the per-task cost vector
@@ -97,18 +108,20 @@ def build_observation(
         f[T_BASE_COST] = task.base_cost / mean_cost
         for nt, node in type_repr.items():
             f[_COST_COL[nt]] = exec_time(task, node) / cp
-        f[T_MEM] = task.mem_required  # raw in M1; normalized in M3a
+        f[T_MEM] = task.mem_required / mean_mem
         is_scheduled = tid in scheduled
         is_ready = tid in ready
         f[T_DONE] = 1.0 if is_scheduled else 0.0
         f[T_READY] = 1.0 if (is_ready and not is_scheduled) else 0.0
         f[T_BLOCKED] = 1.0 if (not is_ready and not is_scheduled) else 0.0
         f[T_SCHEDULED] = 1.0 if is_scheduled else 0.0
-        f[T_UNSCHED_PREDS] = float(sum(1 for p in dag.predecessors(tid) if p not in scheduled))
+        f[T_UNSCHED_PREDS] = (
+            float(sum(1 for p in dag.predecessors(tid) if p not in scheduled)) / denom_tasks
+        )
         f[T_BLEVEL] = dag.b_level(tid) / cp
         f[T_TLEVEL] = dag.t_level(tid) / cp
-        f[T_OUTDEG] = float(dag.out_degree(tid))
-        f[T_OUTDATA] = dag.out_data(tid)
+        f[T_OUTDEG] = float(dag.out_degree(tid)) / denom_tasks
+        f[T_OUTDATA] = dag.out_data(tid) / mean_out
         ready_mask[tid] = is_ready and not is_scheduled
 
     node_features = np.zeros((m, N_NODE_FEATURES), dtype=np.float32)
@@ -117,9 +130,13 @@ def build_observation(
         nf = node_features[j]
         nf[_TYPE_COL[node.node_type]] = 1.0
         nf[N_FREE_REL] = (node.free_at_time - state.sim_time) / cp
-        nf[N_UTIL] = node.free_at_time / current_makespan if current_makespan > 0 else 0.0
-        nf[N_POWER] = node.power_w
-        nf[N_SPEED] = float(np.mean(list(node.speed_by_class.values())))  # raw in M1
+        nf[N_UTIL] = (
+            min(1.0, max(0.0, node.free_at_time / current_makespan))
+            if current_makespan > 0
+            else 0.0
+        )
+        nf[N_POWER] = node.power_w / mean_power
+        nf[N_SPEED] = float(np.mean(list(node.speed_by_class.values()))) / mean_speed
         nf[N_ALIVE] = 1.0 if node.alive else 0.0
         alive_mask[j] = node.alive
 
