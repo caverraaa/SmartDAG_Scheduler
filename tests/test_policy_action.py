@@ -58,9 +58,25 @@ def test_joint_log_prob_is_sum_of_head_log_probs() -> None:
 
 
 def test_gradients_flow_through_both_heads_and_critic() -> None:
-    obs = _obs()
+    # Use a 2-ready state (after scheduling task 0) so the masked task
+    # distribution is non-degenerate and head_task receives gradient through
+    # both log_prob and entropy.
+    tasks = [
+        Task(0, 2.0, 1.0, TaskClass.SEQUENTIAL),
+        Task(1, 4.0, 1.0, TaskClass.SEQUENTIAL),
+        Task(2, 4.0, 1.0, TaskClass.SEQUENTIAL),
+        Task(3, 2.0, 1.0, TaskClass.SEQUENTIAL),
+    ]
+    dag = TaskDAG(tasks, [(0, 1, 10.0), (0, 2, 10.0), (1, 3, 10.0), (2, 3, 10.0)])
+    nodes = [
+        ComputeNode(0, NodeType.CPU, {tc: 1.0 for tc in TaskClass}, 100.0, 10.0),
+        ComputeNode(1, NodeType.GPU, {tc: 2.0 for tc in TaskClass}, 200.0, 10.0),
+    ]
+    env = ClusterEnv(load_config("config.yaml"))
+    obs0, _ = env.reset(dag=dag, nodes=nodes)
+    obs1, _, _, _ = env.step((0, 0))  # schedule task 0 → tasks 1 and 2 become ready
     pol = _policy()
-    log_prob, entropy, value = pol.evaluate_action(obs, 0, 1)
+    log_prob, entropy, value = pol.evaluate_action(obs1, 1, 0)
     loss = -(log_prob) + (value - 1.0) ** 2 - 0.01 * entropy
     loss.backward()
 

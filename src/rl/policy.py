@@ -68,14 +68,5 @@ class TwoHeadPolicy(nn.Module):
         log_prob = task_dist.log_prob(torch.tensor(task_id)) + node_dist.log_prob(
             torch.tensor(node_id)
         )
-        # Use unmasked logits for entropy so gradients flow through head_task even
-        # when only one task is ready (masked entropy collapses to a constant 0 in
-        # that case, killing the gradient path through head_task).
-        all_ready = torch.ones_like(t.ready_mask)
-        all_alive = torch.ones_like(t.alive_mask)
-        task_entropy = Categorical(logits=self.task_logits(h, ctx, all_ready)).entropy()
-        node_entropy = Categorical(
-            logits=self.node_logits(h[task_id], n_emb, ctx, all_alive)
-        ).entropy()
-        entropy = task_entropy + node_entropy
+        entropy = task_dist.entropy() + node_dist.entropy()
         return log_prob, entropy, self.value(ctx)
