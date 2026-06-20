@@ -1,14 +1,17 @@
 # tests/test_cli.py
 import os
+import pathlib
 
 import pandas as pd
+
+_REPO_ROOT = pathlib.Path(__file__).parent.parent
 
 
 def _fast_config(tmp_path) -> str:
     """Write a tiny config.yaml copy with a 2-update training budget for speed."""
     import yaml
 
-    with open("config.yaml", encoding="utf-8") as fh:
+    with open(_REPO_ROOT / "config.yaml", encoding="utf-8") as fh:
         raw = yaml.safe_load(fh)
     raw["total_updates"] = 2
     raw["rollout_episodes"] = 1

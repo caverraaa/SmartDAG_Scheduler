@@ -1,26 +1,8 @@
-import pathlib
-import shutil
-
 import pytest
 
 from src.core.compute_node import ComputeNode, NodeType
 from src.core.dag import TaskDAG
 from src.core.task import Task, TaskClass
-
-_REPO_ROOT = pathlib.Path(__file__).parent.parent
-
-
-@pytest.fixture(autouse=True)
-def _seed_config_in_tmp(tmp_path: pathlib.Path, request: pytest.FixtureRequest) -> None:
-    """Copy the project-root config.yaml into every test's tmp_path.
-
-    Tests that use monkeypatch.chdir(tmp_path) (e.g. test_cli.py) then open
-    "config.yaml" relative to that directory and find a valid copy.
-    """
-    # Only copy when the test actually receives tmp_path; skip session/module scope.
-    if "tmp_path" in request.fixturenames:
-        src = _REPO_ROOT / "config.yaml"
-        shutil.copy(src, tmp_path / "config.yaml")
 
 
 @pytest.fixture
