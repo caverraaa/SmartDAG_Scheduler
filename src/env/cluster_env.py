@@ -1,5 +1,7 @@
 """Gymnasium-style decision-point environment (TZ §5.3, §6.4, Appendix A)."""
 
+import zlib
+
 from src.core.compute_node import ComputeNode
 from src.core.dag import TaskDAG
 from src.core.schedule import Assignment, Schedule
@@ -9,7 +11,7 @@ from src.env.cost_model import energy, exec_time
 from src.env.observation import Observation, build_observation
 from src.env.placement import ClusterState, earliest_start_finish, weighted_cost
 from src.utils.config import Config
-from src.utils.seeding import make_rng
+from src.utils.seeding import derive_rng, make_rng
 
 
 class ClusterEnv:
@@ -19,6 +21,23 @@ class ClusterEnv:
         self.state: ClusterState | None = None
         self.schedule: Schedule | None = None
         self.scheduled: set[int] = set()
+
+    @staticmethod
+    def _instance_signature(dag: TaskDAG, nodes: list[ComputeNode]) -> int:
+        """Deterministic crc32 over the instance, so the calendar is keyed to it."""
+        parts: list[str] = []
+        for tid in range(dag.n_tasks):
+            t = dag.task(tid)
+            parts.append(f"t{tid}:{t.base_cost!r}:{t.mem_required!r}:{t.task_class.value}")
+        for u, v in dag.edge_index():
+            parts.append(f"e{u}-{v}:{dag.edge_data(u, v)!r}")
+        for n in nodes:
+            speeds = ",".join(
+                f"{c.value}={n.speed_by_class[c]!r}"
+                for c in sorted(n.speed_by_class, key=lambda c: c.value)
+            )
+            parts.append(f"n{n.node_id}:{n.node_type.value}:{n.power_w!r}:{n.bandwidth!r}:{speeds}")
+        return zlib.crc32("|".join(parts).encode("utf-8"))
 
     @staticmethod
     def _compute_m_ref(dag: TaskDAG, nodes: list[ComputeNode]) -> float:
@@ -68,8 +87,31 @@ class ClusterEnv:
                 f"Degenerate instance: m_ref={m_ref}, e_ref={e_ref} must both be > 0 "
                 f"(zero would make the normalized reward divide by zero)."
             )
+        sig = self._instance_signature(dag, nodes)
+        noise_rng = derive_rng(self.config.seed, f"noise|{sig}")
+        fail_rng = derive_rng(self.config.seed, f"failure|{sig}")
+        if self.config.noise_std > 0.0:
+            noise_eps = {
+                tid: float(noise_rng.normal(0.0, self.config.noise_std))
+                for tid in range(dag.n_tasks)
+            }
+        else:
+            noise_eps = {tid: 0.0 for tid in range(dag.n_tasks)}
+        if self.config.failure_rate > 0.0:
+            scale = 1.0 / self.config.failure_rate
+            failure_times = {n.node_id: float(fail_rng.exponential(scale)) for n in nodes}
+        else:
+            failure_times = {n.node_id: float("inf") for n in nodes}
+
         self.state = ClusterState(
-            nodes=nodes, dag=dag, task_finish={}, task_node={}, m_ref=m_ref, e_ref=e_ref
+            nodes=nodes,
+            dag=dag,
+            task_finish={},
+            task_node={},
+            m_ref=m_ref,
+            e_ref=e_ref,
+            failure_times=failure_times,
+            noise_eps=noise_eps,
         )
         self.schedule = Schedule(n_nodes=len(nodes))
         self.scheduled = set()
