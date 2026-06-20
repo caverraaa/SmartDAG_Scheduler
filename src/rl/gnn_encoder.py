@@ -33,7 +33,7 @@ class GNNEncoder(nn.Module):
         self, task_in: int = 15, node_in: int = 9, hidden: int = 64, layers: int = 2
     ) -> None:
         super().__init__()
-        self.input = nn.Linear(task_in, hidden)
+        self.input_proj = nn.Linear(task_in, hidden)
         self.layers = nn.ModuleList(_BiSAGELayer(hidden, hidden) for _ in range(layers))
         self.node_mlp = nn.Sequential(
             nn.Linear(node_in, hidden), nn.ReLU(), nn.Linear(hidden, hidden)
@@ -42,7 +42,7 @@ class GNNEncoder(nn.Module):
     def forward(
         self, task_features: Tensor, edge_index: Tensor, node_features: Tensor
     ) -> tuple[Tensor, Tensor, Tensor, Tensor]:
-        x = F.relu(self.input(task_features))
+        x = F.relu(self.input_proj(task_features))
         for layer in self.layers:
             x = layer(x, edge_index)
         h = x
