@@ -2,12 +2,12 @@
 
 from src.core.compute_node import ComputeNode
 from src.core.dag import TaskDAG
-from src.core.schedule import Schedule
+from src.core.schedule import Assignment, Schedule
 from src.dag_factory.factory import DAGFactory
 from src.env.cluster_factory import make_cluster
 from src.env.cost_model import energy, exec_time
 from src.env.observation import Observation, build_observation
-from src.env.placement import ClusterState
+from src.env.placement import ClusterState, earliest_start_finish, weighted_cost
 from src.utils.config import Config
 from src.utils.seeding import make_rng
 
@@ -71,3 +71,50 @@ class ClusterEnv:
         obs = build_observation(self.state, self.scheduled, current_makespan=0.0)
         info = {"m_ref": m_ref, "e_ref": e_ref}
         return obs, info
+
+    def step(self, action: tuple[int, int]) -> tuple[Observation, float, bool, dict]:
+        if self.state is None or self.schedule is None:
+            raise RuntimeError("Call reset() before step().")
+        task_id, node_id = action
+        state = self.state
+        if not (0 <= node_id < len(state.nodes)) or state.nodes[node_id].node_id != node_id:
+            raise ValueError(f"Invalid node_id {node_id}")
+        node = state.nodes[node_id]
+        if not node.alive:
+            raise ValueError(f"Node {node_id} is dead")
+        if task_id in self.scheduled:
+            raise ValueError(f"Task {task_id} already scheduled")
+        if task_id not in set(state.dag.ready_set(self.scheduled)):
+            raise ValueError(f"Task {task_id} is not ready")
+
+        task = state.dag.task(task_id)
+        components = weighted_cost(task, node, state)
+        reward = -(
+            self.config.w1 * components.d_makespan_norm + self.config.w2 * components.d_energy_norm
+        )
+
+        start, finish = earliest_start_finish(task, node, state)
+        step_energy = energy(task, node)
+        node.free_at_time = finish
+        state.task_finish[task_id] = finish
+        state.task_node[task_id] = node_id
+        state.sim_time = max(state.sim_time, finish)
+        self.schedule.add(Assignment(task_id, node_id, start, finish), energy=step_energy)
+        self.scheduled.add(task_id)
+
+        done = len(self.scheduled) == state.dag.n_tasks
+        makespan = self.schedule.makespan()
+        info: dict = {
+            "m_ref": state.m_ref,
+            "e_ref": state.e_ref,
+            "makespan": makespan,
+            "energy": self.schedule.total_energy,
+        }
+        if done:
+            n_alive = sum(1 for n in state.nodes if n.alive)
+            balance = self.schedule.load_balance_index(n_alive)
+            reward += self.config.w3 * balance
+            info["balance"] = balance
+
+        obs = build_observation(state, self.scheduled, current_makespan=makespan)
+        return obs, reward, done, info
