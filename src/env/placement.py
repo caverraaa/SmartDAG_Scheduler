@@ -34,7 +34,11 @@ def horizon(nodes: list[ComputeNode]) -> float:
 def earliest_start_finish(
     task: Task, node: ComputeNode, state: ClusterState
 ) -> tuple[float, float]:
-    """Append-only EFT: when can this task start/finish on this node, given state."""
+    """Append-only EFT: when can this task start/finish on this node, given state.
+
+    Precondition: every predecessor of `task` must already be present in
+    `state.task_finish` (i.e. the task is ready); otherwise a KeyError is raised.
+    """
     ready_time = 0.0
     for pred in state.dag.predecessors(task.id):
         pred_finish = state.task_finish[pred]
@@ -50,6 +54,7 @@ def weighted_cost(task: Task, node: ComputeNode, state: ClusterState) -> CostCom
 
     Δmakespan is the change in the schedule HORIZON (A.2), not the task finish.
     Side-effect-free: never mutates node/state.
+    Inherits the predecessor-readiness precondition from earliest_start_finish.
     """
     before = horizon(state.nodes)
     _, finish = earliest_start_finish(task, node, state)
