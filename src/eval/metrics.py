@@ -13,12 +13,17 @@ from src.env.placement import ClusterState
 from src.strategies.base import BaseSchedulingStrategy
 
 
-def utilisation(schedule: Schedule, c_max: float, alive_ids: list[int]) -> float:
-    """Total busy time / (makespan x number of alive nodes)."""
-    if c_max <= 0.0 or not alive_ids:
+def utilisation(schedule: Schedule, c_max: float, n_nodes: int) -> float:
+    """Total busy time over all provisioned nodes / (makespan x initial node count).
+
+    Numerator includes work committed on nodes that later failed; the denominator
+    is the initially-provisioned cluster size, so this reflects whole-cluster usage
+    (including effort wasted on failed nodes), disclosed in the thesis.
+    """
+    if c_max <= 0.0 or n_nodes <= 0:
         return 0.0
     total_busy = sum(schedule.busy_time_by_node().values())
-    return total_busy / (c_max * len(alive_ids))
+    return total_busy / (c_max * n_nodes)
 
 
 def slr(c_max: float, m_ref: float) -> float:
@@ -47,7 +52,7 @@ def compute_run_metrics(
     return {
         "makespan": c_max,
         "energy": schedule.total_energy,
-        "utilisation": utilisation(schedule, c_max, alive_ids),
+        "utilisation": utilisation(schedule, c_max, len(nodes)),
         "load_balance": schedule.load_balance_index(alive_ids),
         "slr": slr(c_max, float(info["m_ref"])),
         "speedup": speedup(dag, nodes, c_max),

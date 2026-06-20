@@ -39,7 +39,7 @@ def test_compute_run_metrics_golden(golden_instance) -> None:
 def test_speedup_and_utilisation_helpers(golden_instance) -> None:
     schedule, info, dag, nodes, alive_ids = _run_golden(golden_instance)
     assert speedup(dag, nodes, 6.0) == 1.0
-    assert utilisation(schedule, 6.0, alive_ids) == 0.5
+    assert utilisation(schedule, 6.0, len(nodes)) == 0.5
 
 
 def test_timing_strategy_accumulates_and_delegates() -> None:
