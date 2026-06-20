@@ -1,0 +1,17 @@
+# Reward weights (TZ §6.4)
+w1: 1.0   # makespan
+w2: 0.3   # energy
+w3: 0.2   # terminal load-balance
+
+# Instance generation
+seed: 0
+n_tasks: 30
+n_nodes: 8
+beta: 5.0        # heterogeneity factor (max/min speed ratio across node types)
+ccr: 0.5         # communication-to-computation ratio
+edge_prob: 0.4   # intra-layer-forward edge probability
+n_layers: 6
+
+# Stochasticity (deterministic in M1)
+noise_std: 0.0
+failure_rate: 0.0
