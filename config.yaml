@@ -29,3 +29,12 @@ total_updates: 50
 max_grad_norm: 0.5
 gnn_hidden: 64
 gnn_layers: 2
+
+# WfCommons parser modeling constants (M5). Disclosed in thesis.
+wfcommons:
+  default_mem: 4.0          # mem_required when execution.memoryInBytes is absent
+  eps: 0.01                 # volume on a precedence edge that shares no file
+  bytes_to_unit: 1.0e-6     # file sizeInBytes -> cost-unit volume (preserves native CCR)
+  mem_min: 1.0              # rescale floor for mem_required (matches synthetic ~1-8)
+  mem_max: 8.0              # rescale ceiling for mem_required
+  memory_ref_bytes: 8.0e9   # memoryInBytes that maps to mem_max

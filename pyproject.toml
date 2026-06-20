@@ -25,3 +25,7 @@ target-version = ["py310"]
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]
+addopts = "-m 'not wfcommons'"
+markers = [
+    "wfcommons: live wfcommons-library integration tests (deselected by default; run with -m wfcommons)",
+]

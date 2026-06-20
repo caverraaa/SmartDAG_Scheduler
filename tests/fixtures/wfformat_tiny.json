@@ -1,0 +1,32 @@
+{
+  "name": "tiny-montage",
+  "description": "Hand-authored WfFormat v1.5 fixture for parser tests.",
+  "schemaVersion": "1.5",
+  "workflow": {
+    "specification": {
+      "tasks": [
+        {"id": "task-1", "name": "mProject_00000001", "parents": [], "children": ["task-2", "task-3"], "inputFiles": [], "outputFiles": ["f_ra"]},
+        {"id": "task-2", "name": "mDiffFit_00000001", "parents": ["task-1"], "children": ["task-4"], "inputFiles": ["f_ra"], "outputFiles": ["f_as"]},
+        {"id": "task-3", "name": "mDiffFit_00000002", "parents": ["task-1"], "children": ["task-4"], "inputFiles": [], "outputFiles": ["f_bs"]},
+        {"id": "task-4", "name": "mConcatFit_00000001", "parents": ["task-2", "task-3"], "children": [], "inputFiles": ["f_as", "f_bs"], "outputFiles": []}
+      ],
+      "files": [
+        {"id": "f_ra", "sizeInBytes": 100},
+        {"id": "f_as", "sizeInBytes": 200},
+        {"id": "f_bs", "sizeInBytes": 50}
+      ]
+    },
+    "execution": {
+      "makespanInSeconds": 14.0,
+      "tasks": [
+        {"id": "task-1", "runtimeInSeconds": 5.0, "memoryInBytes": 8000000000},
+        {"id": "task-2", "runtimeInSeconds": 3.0},
+        {"id": "task-3", "runtimeInSeconds": 4.0, "memoryInBytes": 4000000000},
+        {"id": "task-4", "runtimeInSeconds": 2.0, "memoryInBytes": 0}
+      ],
+      "machines": [
+        {"nodeName": "ref", "cpu": {"coreCount": 1, "speedInMHz": 1000}}
+      ]
+    }
+  }
+}
