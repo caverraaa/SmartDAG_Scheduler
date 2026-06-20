@@ -48,8 +48,7 @@ class TwoHeadPolicy(nn.Module):
     def value(self, ctx: Tensor) -> Tensor:
         return self.critic(ctx).squeeze(-1)
 
-    def act(self, obs: Observation) -> tuple[tuple[int, int], Tensor, Tensor]:
-        t = obs_to_tensors(obs)
+    def act_from_tensors(self, t: ObsTensors) -> tuple[tuple[int, int], Tensor, Tensor]:
         h, n_emb, ctx = self.encode(t)
         task_dist = Categorical(logits=self.task_logits(h, ctx, t.ready_mask))
         task_id = task_dist.sample()
@@ -58,15 +57,30 @@ class TwoHeadPolicy(nn.Module):
         log_prob = task_dist.log_prob(task_id) + node_dist.log_prob(node_id)
         return (int(task_id), int(node_id)), log_prob, self.value(ctx)
 
-    def evaluate_action(
-        self, obs: Observation, task_id: int, node_id: int
+    def act(self, obs: Observation) -> tuple[tuple[int, int], Tensor, Tensor]:
+        return self.act_from_tensors(obs_to_tensors(obs))
+
+    def evaluate_tensors(
+        self, t: ObsTensors, task_id: int, node_id: int
     ) -> tuple[Tensor, Tensor, Tensor]:
-        t = obs_to_tensors(obs)
         h, n_emb, ctx = self.encode(t)
+        device = t.task_features.device
         task_dist = Categorical(logits=self.task_logits(h, ctx, t.ready_mask))
         node_dist = Categorical(logits=self.node_logits(h[task_id], n_emb, ctx, t.alive_mask))
-        log_prob = task_dist.log_prob(torch.tensor(task_id)) + node_dist.log_prob(
-            torch.tensor(node_id)
+        log_prob = task_dist.log_prob(torch.tensor(task_id, device=device)) + node_dist.log_prob(
+            torch.tensor(node_id, device=device)
         )
         entropy = task_dist.entropy() + node_dist.entropy()
         return log_prob, entropy, self.value(ctx)
+
+    def evaluate_action(
+        self, obs: Observation, task_id: int, node_id: int
+    ) -> tuple[Tensor, Tensor, Tensor]:
+        return self.evaluate_tensors(obs_to_tensors(obs), task_id, node_id)
+
+    def act_greedy(self, obs: Observation) -> tuple[int, int]:
+        t = obs_to_tensors(obs)
+        h, n_emb, ctx = self.encode(t)
+        task_id = int(self.task_logits(h, ctx, t.ready_mask).argmax())
+        node_id = int(self.node_logits(h[task_id], n_emb, ctx, t.alive_mask).argmax())
+        return task_id, node_id
