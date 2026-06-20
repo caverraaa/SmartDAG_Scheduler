@@ -13,10 +13,13 @@ def test_live_recipe_parses(tmp_path) -> None:
     pytest.importorskip("wfcommons")
     from tools.gen_wfcommons import generate
 
-    path = generate(recipe="montage", n_tasks=20, seed=42, out_dir=str(tmp_path))
+    # wfchef cannot shrink below a recipe's base microstructure (~60 tasks here).
+    path = generate(recipe="montage", n_tasks=60, seed=42, out_dir=str(tmp_path))
 
     from src.dag_factory.factory import DAGFactory
 
     dag = DAGFactory.load_from_wfcommons(path, np.random.default_rng(0), recipe="montage")
     assert dag.n_tasks >= 1
     assert dag.critical_path_length() > 0.0
+    # Realistic workflows must retain class heterogeneity (else node selection is trivial).
+    assert len({dag.task(i).task_class for i in range(dag.n_tasks)}) >= 2

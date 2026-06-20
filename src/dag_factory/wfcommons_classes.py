@@ -25,9 +25,10 @@ def stable_hash(text: str) -> int:
     return int(hashlib.md5(text.encode("utf-8")).hexdigest(), 16)
 
 
-# Curated per-recipe tables. Montage names are confirmed; cybershake/blast are
-# best-effort and verified/extended against generated JSON during benchmark
-# regeneration (Task 6). Unknown names fall back deterministically, so an
+# Curated per-recipe tables. All names below are confirmed against wfcommons 1.4
+# wfchef output (Montage / Genome / Blast at ~60 tasks). CyberShake is not a
+# bundled wfchef recipe in 1.4, so Genome takes its place (see
+# dag_benchmarks/README.md). Unknown names fall back deterministically, so an
 # out-of-date table degrades gracefully rather than failing.
 RECIPE_TABLES: dict[str, dict[str, TaskClass]] = {
     "montage": {
@@ -38,21 +39,20 @@ RECIPE_TABLES: dict[str, dict[str, TaskClass]] = {
         "mBackground": TaskClass.DATA_PARALLEL,
         "mImgtbl": TaskClass.SEQUENTIAL,
         "mAdd": TaskClass.DATA_PARALLEL,
-        "mShrink": TaskClass.STREAMING,
         "mViewer": TaskClass.SEQUENTIAL,
     },
-    "cybershake": {
-        "PreCVM": TaskClass.SEQUENTIAL,
-        "ExtractSGT": TaskClass.STREAMING,
-        "SeismogramSynthesis": TaskClass.DATA_PARALLEL,
-        "PeakValCalcOkaya": TaskClass.DATA_PARALLEL,
-        "ZipSeis": TaskClass.SEQUENTIAL,
-        "ZipPSA": TaskClass.SEQUENTIAL,
+    "genome": {
+        "individuals": TaskClass.DATA_PARALLEL,
+        "individuals_merge": TaskClass.SEQUENTIAL,
+        "sifting": TaskClass.STREAMING,
+        "mutation_overlap": TaskClass.DATA_PARALLEL,
+        "frequency": TaskClass.SEQUENTIAL,
     },
     "blast": {
         "blastall": TaskClass.DATA_PARALLEL,
-        "split": TaskClass.SEQUENTIAL,
+        "split_fasta": TaskClass.SEQUENTIAL,
         "cat": TaskClass.SEQUENTIAL,
+        "cat_blast": TaskClass.SEQUENTIAL,
     },
 }
 

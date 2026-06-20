@@ -1,0 +1,3037 @@
+{
+    "name": "Blast-synthetic-instance",
+    "description": "Instance generated with WfCommons - https://wfcommons.org",
+    "createdAt": "2026-06-20T18:36:22.433792+00:00",
+    "schemaVersion": "1.5",
+    "author": {
+        "name": "caverraaa",
+        "email": "support@wfcommons.org"
+    },
+    "workflow": {
+        "specification": {
+            "tasks": [
+                {
+                    "name": "split_fasta",
+                    "id": "split_fasta_00000001",
+                    "parents": [],
+                    "children": [
+                        "blastall_00000002",
+                        "blastall_00000003",
+                        "blastall_00000004",
+                        "blastall_00000005",
+                        "blastall_00000006",
+                        "blastall_00000007",
+                        "blastall_00000008",
+                        "blastall_00000009",
+                        "blastall_00000010",
+                        "blastall_00000011",
+                        "blastall_00000012",
+                        "blastall_00000013",
+                        "blastall_00000014",
+                        "blastall_00000015",
+                        "blastall_00000016",
+                        "blastall_00000017",
+                        "blastall_00000018",
+                        "blastall_00000019",
+                        "blastall_00000020",
+                        "blastall_00000021",
+                        "blastall_00000022",
+                        "blastall_00000023",
+                        "blastall_00000024",
+                        "blastall_00000025",
+                        "blastall_00000026",
+                        "blastall_00000027",
+                        "blastall_00000028",
+                        "blastall_00000029",
+                        "blastall_00000030",
+                        "blastall_00000031",
+                        "blastall_00000032",
+                        "blastall_00000033",
+                        "blastall_00000034",
+                        "blastall_00000035",
+                        "blastall_00000036",
+                        "blastall_00000037",
+                        "blastall_00000038",
+                        "blastall_00000039",
+                        "blastall_00000040",
+                        "blastall_00000041",
+                        "blastall_00000044",
+                        "blastall_00000045",
+                        "blastall_00000046",
+                        "blastall_00000047",
+                        "blastall_00000048",
+                        "blastall_00000049",
+                        "blastall_00000050",
+                        "blastall_00000051",
+                        "blastall_00000052",
+                        "blastall_00000053",
+                        "blastall_00000054",
+                        "blastall_00000055",
+                        "blastall_00000056",
+                        "blastall_00000057",
+                        "blastall_00000058"
+                    ],
+                    "inputFiles": [
+                        "6150aab6-d043-420a-91bd-e30064a60e7a.fasta",
+                        "df76ac7e-981c-4543-8df0-18d5bdf46e71split_fasta"
+                    ],
+                    "outputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000002",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "d7b6c47b-eefe-4a64-9a08-03dc5b6de5b6blastall",
+                        "9a47e48a-871f-43fd-a6c6-0294d95a5a2ant"
+                    ],
+                    "outputFiles": [
+                        "26e96262-c81b-41ef-9773-da0708829b61.out",
+                        "5396d6e9-35a5-4322-8372-1f81dcf88e63.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000003",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "f25c4208-bcb5-4ca9-84b5-851624363d7cblastall",
+                        "7619fa6c-0157-4591-9b66-b28b6d7aa454nt"
+                    ],
+                    "outputFiles": [
+                        "f3d8cef7-e905-4e09-8763-e3adf95eac5f.out",
+                        "07f61ecd-3e8b-438d-8f3f-727dc82893c1.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000004",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "3a1b1d0a-50ce-40c9-b6de-42a710b93321blastall",
+                        "7d6cc9e2-0483-4312-a076-9f095bc0c926nt"
+                    ],
+                    "outputFiles": [
+                        "ebed6e47-d49f-4aa0-a5d5-bd9de278b473.out",
+                        "9aa153c5-94e5-4b4b-bd18-50d574c81cc4.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000005",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "c70a1fd2-16ca-472d-b987-5e69922ba8cdblastall",
+                        "cb14fa55-696c-4476-9b39-b967b87a202cnt"
+                    ],
+                    "outputFiles": [
+                        "420ea68b-cc39-4374-be8e-a9f1b805688d.out",
+                        "237b2d7a-f125-4d91-b166-0895f59ef02a.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000006",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "733ebc86-945f-4a92-bc2b-3c888174b599blastall",
+                        "e012a67f-a60b-40b1-83bb-e9892ba06d99nt"
+                    ],
+                    "outputFiles": [
+                        "49eb3e9e-dbde-422f-879f-17b45cdeaba6.out",
+                        "67e151d5-349b-4095-91c5-50f1991b4c4c.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000007",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "fe0fc4f2-d1b6-490f-a6d2-21fe4049de22blastall",
+                        "1a60d033-a1fd-4b64-987a-793de6beecb4nt"
+                    ],
+                    "outputFiles": [
+                        "5873d7da-3220-4ea3-a920-9995a187d030.out",
+                        "b0cec361-4d07-480d-a2a4-0f4945be98fa.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000008",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "4b784c3d-d509-41b0-86ed-938e60dc9cdfblastall",
+                        "a63aaac9-5c04-4f0b-9ad9-67acac742b57nt"
+                    ],
+                    "outputFiles": [
+                        "a3d4083e-923d-4b52-a4d0-e82f15d435c3.out",
+                        "310e7418-7638-4398-b61b-50534de33090.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000009",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "ff5c8e6a-9eeb-4318-9b2c-a79c8851cefablastall",
+                        "462c3fb3-3136-4134-8fbe-512807f360e4nt"
+                    ],
+                    "outputFiles": [
+                        "282ecbae-c1e8-441d-b696-979018f97a29.out",
+                        "2995a958-ceb5-4110-99d5-bea27bb73d2c.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000010",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "bca08c19-b898-4525-ad62-a894e89ff0cablastall",
+                        "14b4c9d1-7abd-47d0-81d0-acc8d53eda32nt"
+                    ],
+                    "outputFiles": [
+                        "e5c15d61-351e-4f7e-9439-00744844c6b0.out",
+                        "956d8716-421d-4b47-9e85-ae35455a34c1.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000011",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "ec50649d-b80c-4815-aae2-9977b6762e2eblastall",
+                        "ad5627db-ed33-4100-a431-5bd5e02209bbnt"
+                    ],
+                    "outputFiles": [
+                        "a3c49823-5d91-43eb-bd1d-fcf3209909c6.out",
+                        "12f08436-27bc-461c-a766-6df4c115a518.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000012",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "c89ff8ba-ed01-4c5e-b410-7fc84c967f8cblastall",
+                        "430f5a31-5081-4e46-b12a-76bbbdc9ef85nt"
+                    ],
+                    "outputFiles": [
+                        "9e63a8b7-f9a8-442e-9589-ddc954cd2f3a.out",
+                        "35b0b956-2207-404d-b666-bcc6b19ff7ca.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000013",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "c35dc64e-197b-46a8-a66e-04af80d1b1eeblastall",
+                        "fb1c8a45-75d3-4fbd-8457-405de51ca059nt"
+                    ],
+                    "outputFiles": [
+                        "4938f494-267b-43d6-ab2b-7067fef1fac2.out",
+                        "f0a9fbae-6b89-417d-9535-ed1331eaab8d.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000014",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "c8f8f0d5-16ee-43ad-899e-685f6147d333blastall",
+                        "6b1d0dbc-0a38-4313-84e9-1911ab63445ant"
+                    ],
+                    "outputFiles": [
+                        "44d89c94-ecb6-4eb3-abb0-df3606079c72.out",
+                        "5791886f-4d62-4271-a4b3-30f9b6ffb83f.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000015",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "7e981e08-557f-4830-86bc-7f92101e2d06blastall",
+                        "ffbae9fd-6c18-47cc-88bd-907562238899nt"
+                    ],
+                    "outputFiles": [
+                        "3f6f044a-825a-417f-ae27-c8b375ff9ba1.out",
+                        "12ca251c-fcfa-4159-bc21-54224a9bc79a.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000016",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "f2667f0c-4a21-437f-beba-cb9c38c6bddbblastall",
+                        "05426d55-dc8f-4196-8b5a-5e1338592917nt"
+                    ],
+                    "outputFiles": [
+                        "04c50ade-b2f2-4621-81b8-62e7284918f5.out",
+                        "44423e09-cac2-4839-a73e-233d8e30f9d6.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000017",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "32d976ef-7295-4348-9946-e54a4561e2cbblastall",
+                        "6c3d4bd7-4f88-44c1-ab9d-182f00a5e827nt"
+                    ],
+                    "outputFiles": [
+                        "d6260abb-0143-45cf-a0d1-d1bf99d6d168.out",
+                        "d678034c-ed2e-4645-9e60-0eb0b7eea85e.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000018",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "a2ab5be5-958e-4fc3-80d0-334c09d6b62cblastall",
+                        "82d89a4d-3239-4b74-981b-06e8b271e833nt"
+                    ],
+                    "outputFiles": [
+                        "a2f68a77-2ce4-43ad-9262-07a73ca8147a.out",
+                        "9b2cab66-9e99-49a3-b401-e71092f16361.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000019",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "aca513f1-04a1-4b74-83ad-adefe0e15f63blastall",
+                        "63fe2784-eba3-4e97-b538-023f6b68e8ednt"
+                    ],
+                    "outputFiles": [
+                        "dc83f7da-ce8d-446e-a190-51684829c00f.out",
+                        "2fdc914a-871b-42f0-bbaf-6ae6ab6eeac6.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000020",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "0ebaea20-a6d6-4908-b463-fb9de2077feeblastall",
+                        "96544db7-a518-4cb5-93a1-3acb538a1fbent"
+                    ],
+                    "outputFiles": [
+                        "c4d76870-62f4-4f2c-923a-daa6ed9a802e.out",
+                        "aa3959f7-05c6-44d3-98e3-13f3739597b8.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000021",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "18c4b22f-4ae0-4af8-94dd-7342bb7585d1blastall",
+                        "d20a34e3-361a-42c6-ab35-2865afdf7f22nt"
+                    ],
+                    "outputFiles": [
+                        "18260b69-091e-4f1e-8530-e9a61170bc03.out",
+                        "e99fd207-0a85-42a4-9d86-a5201c3602ac.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000022",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "baa14aa4-05d3-4c39-b0cc-11681a8f2c78blastall",
+                        "6f7691d2-972a-4353-813a-12a008d87aecnt"
+                    ],
+                    "outputFiles": [
+                        "a1988053-3a38-4e45-890f-aad31c6424bd.out",
+                        "eb419cd9-47af-4da2-a4f9-3dbbfbf5ff0c.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000023",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "57ba4f0e-68fd-4843-b9b8-2eebe97b2013blastall",
+                        "78a10c07-2eca-4c82-af06-f85042de0389nt"
+                    ],
+                    "outputFiles": [
+                        "fd1c9947-4da8-414f-bedb-51ee42140306.out",
+                        "91dacf32-f997-4ab4-8463-cdf95b96d070.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000024",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "806f7525-c46a-41b8-8b61-48271de70bd4blastall",
+                        "2ebe004a-ea4a-4de9-9017-68e7b8194728nt"
+                    ],
+                    "outputFiles": [
+                        "ed89c06e-2ea6-4580-80ab-609f96f95c42.out",
+                        "b206ea14-eda6-4401-9840-6404187d2133.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000025",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "22c04a46-2725-42fc-96e4-1c07ba7fcd56blastall",
+                        "aba88317-81f6-4fc6-aae1-0083664deb9dnt"
+                    ],
+                    "outputFiles": [
+                        "c357af39-6f75-4f4a-9c85-9cfad6d299cb.out",
+                        "88ceb653-6ad5-441a-89b2-45d10d7e479d.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000026",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "cba19f1f-4782-4321-a496-931ac5841253blastall",
+                        "1d799982-2347-4dab-91c9-cc79fd47f5aant"
+                    ],
+                    "outputFiles": [
+                        "feb98913-b8ee-4310-861b-f6749e28db72.out",
+                        "129f4563-5d78-40c3-b00d-f4902dd4135e.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000027",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "57880d88-723b-4691-bc61-19310f410b61blastall",
+                        "52dfcf06-08eb-4df3-8cfa-107ad8e8668cnt"
+                    ],
+                    "outputFiles": [
+                        "7989c9d0-93a6-44ba-999e-f550238dfc10.out",
+                        "7e2ab72e-af3d-4911-a04d-f199b24bc206.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000028",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "155e149d-ff4e-40a1-acd7-fbecdde76376blastall",
+                        "3e79c5d5-1468-4d22-bbe1-e98f78ef8fe0nt"
+                    ],
+                    "outputFiles": [
+                        "b9912878-d907-49bc-854a-b48647a0027b.out",
+                        "92b0cdea-a737-42ef-9cce-44a91bf73b90.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000029",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "edb8db29-6c4b-41e8-a885-6d1ea3314221blastall",
+                        "d41c5be8-d040-4a3b-8487-66d4dc1cae20nt"
+                    ],
+                    "outputFiles": [
+                        "6580f96c-bd6c-4737-aa26-22c56eaef852.out",
+                        "2026fa11-f26c-443c-948d-f1d5be5a536d.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000030",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "74c0c1cf-3a1d-4748-ab1c-fa6dccd80288blastall",
+                        "29a807a0-6ac2-4834-8334-efecd626e0bent"
+                    ],
+                    "outputFiles": [
+                        "f2b6a959-423b-4cef-9c16-7a5736856081.out",
+                        "dd96c9df-25da-4f5d-ac65-3b163d135b38.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000031",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "1592a797-de83-4e94-90d3-a9ba1bd80064blastall",
+                        "9a9028c9-328f-4fa1-aea3-af83940726b9nt"
+                    ],
+                    "outputFiles": [
+                        "f6f6968c-e802-4137-a10d-2ae737eddebe.out",
+                        "4da221f0-a5d8-4f24-9cda-3b013239d66c.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000032",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "6547a1b5-16cf-4a8a-a4b1-c5dd560445beblastall",
+                        "4a1ef503-bcd2-462e-897b-9aa80852713ent"
+                    ],
+                    "outputFiles": [
+                        "dde42d4e-8d5b-4174-bf5d-425128e66900.out",
+                        "4a087fa7-2333-4902-beae-be302100b3a1.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000033",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "8ae49893-c94e-40ea-9c73-8e26e071a2f1blastall",
+                        "b5d24e78-917c-4c1b-b7be-d6457e6bcd07nt"
+                    ],
+                    "outputFiles": [
+                        "563cff35-e28e-4bf0-83e5-aac9108e36ae.out",
+                        "c1a3183a-61f9-48cd-89b6-f9e8aae54df0.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000034",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "e0590c46-d8ec-4a9e-a131-e0f0b761f22cblastall",
+                        "70fb42be-02f6-44be-8c05-3f7d80b0a96ent"
+                    ],
+                    "outputFiles": [
+                        "8fa5615a-476b-4faf-b717-6a0d9024b64a.out",
+                        "d44f2e9d-b3a5-4fd6-98ea-c2edf9ee93f0.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000035",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "2807fe7a-06a8-43eb-b48f-e84ae99d02feblastall",
+                        "f1ab2317-ac6a-48dc-b355-e9e37dcf3a54nt"
+                    ],
+                    "outputFiles": [
+                        "6fc57ccc-6370-4fd7-95d3-f5e3b37b4b65.out",
+                        "a70457fc-0db8-49a1-bc8e-87a7bf45078e.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000036",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "b976408a-cbc5-4736-898e-a95feaa4cbc8blastall",
+                        "d71f6f10-aeb7-4f09-b09b-d008e36e71b2nt"
+                    ],
+                    "outputFiles": [
+                        "8a694d52-b9da-4b58-a5cc-0ff8d3de8d24.out",
+                        "7795f3e2-22de-4bf0-ba22-a5e4abee48a0.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000037",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "9a0546bc-5855-4800-ab56-c4163bdfd21eblastall",
+                        "92b5912d-f376-4b8d-a6de-e0b581b95600nt"
+                    ],
+                    "outputFiles": [
+                        "d914fb0e-6240-42ea-8df7-3dbb76b45908.out",
+                        "6fb27ec1-069f-48f8-aa09-45be63a644f4.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000038",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "d24d2e2a-142f-4fd0-846e-a6ac7623156bblastall",
+                        "15e8c41f-f764-4d9f-8f05-882fdb44ace3nt"
+                    ],
+                    "outputFiles": [
+                        "e20b813a-0d2f-454a-bd55-9be679b80f2d.out",
+                        "c3ae9b0b-e52e-45b7-ad01-93edcca154d4.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000039",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "c9eae7f5-ed4b-4749-ac3e-c3b2705027d9blastall",
+                        "0dc0ddf1-1ffb-46f0-8923-5aaebc831e87nt"
+                    ],
+                    "outputFiles": [
+                        "76eedea3-c738-4a8d-976f-3deef461b11d.out",
+                        "07043a9f-50e1-46d1-903b-45ce00b1642c.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000040",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "41fb657b-12b4-4e8e-a708-d3da5f051ad4blastall",
+                        "28fbe948-2f29-4b9f-8992-da5177c8ad73nt"
+                    ],
+                    "outputFiles": [
+                        "e6eea97f-ec39-4240-b940-9214d5ac4e46.out",
+                        "e0747c02-7e26-426c-916c-0448ccafd244.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000041",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "a556b116-8a69-4cc8-9719-87f164ebec66blastall",
+                        "bd38ab36-49c0-43ba-85cc-6336bf4b7779nt"
+                    ],
+                    "outputFiles": [
+                        "371e8ea7-ec3f-45e4-9144-959edd943fea.out",
+                        "b46ac5f2-3db9-4a33-b403-d9d58ea13479.err"
+                    ]
+                },
+                {
+                    "name": "cat_blast",
+                    "id": "cat_blast_00000042",
+                    "parents": [
+                        "blastall_00000002",
+                        "blastall_00000003",
+                        "blastall_00000004",
+                        "blastall_00000005",
+                        "blastall_00000006",
+                        "blastall_00000007",
+                        "blastall_00000008",
+                        "blastall_00000009",
+                        "blastall_00000010",
+                        "blastall_00000011",
+                        "blastall_00000012",
+                        "blastall_00000013",
+                        "blastall_00000014",
+                        "blastall_00000015",
+                        "blastall_00000016",
+                        "blastall_00000017",
+                        "blastall_00000018",
+                        "blastall_00000019",
+                        "blastall_00000020",
+                        "blastall_00000021",
+                        "blastall_00000022",
+                        "blastall_00000023",
+                        "blastall_00000024",
+                        "blastall_00000025",
+                        "blastall_00000026",
+                        "blastall_00000027",
+                        "blastall_00000028",
+                        "blastall_00000029",
+                        "blastall_00000030",
+                        "blastall_00000031",
+                        "blastall_00000032",
+                        "blastall_00000033",
+                        "blastall_00000034",
+                        "blastall_00000035",
+                        "blastall_00000036",
+                        "blastall_00000037",
+                        "blastall_00000038",
+                        "blastall_00000039",
+                        "blastall_00000040",
+                        "blastall_00000041",
+                        "blastall_00000044",
+                        "blastall_00000045",
+                        "blastall_00000046",
+                        "blastall_00000047",
+                        "blastall_00000048",
+                        "blastall_00000049",
+                        "blastall_00000050",
+                        "blastall_00000051",
+                        "blastall_00000052",
+                        "blastall_00000053",
+                        "blastall_00000054",
+                        "blastall_00000055",
+                        "blastall_00000056",
+                        "blastall_00000057",
+                        "blastall_00000058"
+                    ],
+                    "children": [],
+                    "inputFiles": [
+                        "26e96262-c81b-41ef-9773-da0708829b61.out",
+                        "5396d6e9-35a5-4322-8372-1f81dcf88e63.err",
+                        "f3d8cef7-e905-4e09-8763-e3adf95eac5f.out",
+                        "07f61ecd-3e8b-438d-8f3f-727dc82893c1.err",
+                        "ebed6e47-d49f-4aa0-a5d5-bd9de278b473.out",
+                        "9aa153c5-94e5-4b4b-bd18-50d574c81cc4.err",
+                        "420ea68b-cc39-4374-be8e-a9f1b805688d.out",
+                        "237b2d7a-f125-4d91-b166-0895f59ef02a.err",
+                        "49eb3e9e-dbde-422f-879f-17b45cdeaba6.out",
+                        "67e151d5-349b-4095-91c5-50f1991b4c4c.err",
+                        "5873d7da-3220-4ea3-a920-9995a187d030.out",
+                        "b0cec361-4d07-480d-a2a4-0f4945be98fa.err",
+                        "a3d4083e-923d-4b52-a4d0-e82f15d435c3.out",
+                        "310e7418-7638-4398-b61b-50534de33090.err",
+                        "282ecbae-c1e8-441d-b696-979018f97a29.out",
+                        "2995a958-ceb5-4110-99d5-bea27bb73d2c.err",
+                        "e5c15d61-351e-4f7e-9439-00744844c6b0.out",
+                        "956d8716-421d-4b47-9e85-ae35455a34c1.err",
+                        "a3c49823-5d91-43eb-bd1d-fcf3209909c6.out",
+                        "12f08436-27bc-461c-a766-6df4c115a518.err",
+                        "9e63a8b7-f9a8-442e-9589-ddc954cd2f3a.out",
+                        "35b0b956-2207-404d-b666-bcc6b19ff7ca.err",
+                        "4938f494-267b-43d6-ab2b-7067fef1fac2.out",
+                        "f0a9fbae-6b89-417d-9535-ed1331eaab8d.err",
+                        "44d89c94-ecb6-4eb3-abb0-df3606079c72.out",
+                        "5791886f-4d62-4271-a4b3-30f9b6ffb83f.err",
+                        "3f6f044a-825a-417f-ae27-c8b375ff9ba1.out",
+                        "12ca251c-fcfa-4159-bc21-54224a9bc79a.err",
+                        "04c50ade-b2f2-4621-81b8-62e7284918f5.out",
+                        "44423e09-cac2-4839-a73e-233d8e30f9d6.err",
+                        "d6260abb-0143-45cf-a0d1-d1bf99d6d168.out",
+                        "d678034c-ed2e-4645-9e60-0eb0b7eea85e.err",
+                        "a2f68a77-2ce4-43ad-9262-07a73ca8147a.out",
+                        "9b2cab66-9e99-49a3-b401-e71092f16361.err",
+                        "dc83f7da-ce8d-446e-a190-51684829c00f.out",
+                        "2fdc914a-871b-42f0-bbaf-6ae6ab6eeac6.err",
+                        "c4d76870-62f4-4f2c-923a-daa6ed9a802e.out",
+                        "aa3959f7-05c6-44d3-98e3-13f3739597b8.err",
+                        "18260b69-091e-4f1e-8530-e9a61170bc03.out",
+                        "e99fd207-0a85-42a4-9d86-a5201c3602ac.err",
+                        "a1988053-3a38-4e45-890f-aad31c6424bd.out",
+                        "eb419cd9-47af-4da2-a4f9-3dbbfbf5ff0c.err",
+                        "fd1c9947-4da8-414f-bedb-51ee42140306.out",
+                        "91dacf32-f997-4ab4-8463-cdf95b96d070.err",
+                        "ed89c06e-2ea6-4580-80ab-609f96f95c42.out",
+                        "b206ea14-eda6-4401-9840-6404187d2133.err",
+                        "c357af39-6f75-4f4a-9c85-9cfad6d299cb.out",
+                        "88ceb653-6ad5-441a-89b2-45d10d7e479d.err",
+                        "feb98913-b8ee-4310-861b-f6749e28db72.out",
+                        "129f4563-5d78-40c3-b00d-f4902dd4135e.err",
+                        "7989c9d0-93a6-44ba-999e-f550238dfc10.out",
+                        "7e2ab72e-af3d-4911-a04d-f199b24bc206.err",
+                        "b9912878-d907-49bc-854a-b48647a0027b.out",
+                        "92b0cdea-a737-42ef-9cce-44a91bf73b90.err",
+                        "6580f96c-bd6c-4737-aa26-22c56eaef852.out",
+                        "2026fa11-f26c-443c-948d-f1d5be5a536d.err",
+                        "f2b6a959-423b-4cef-9c16-7a5736856081.out",
+                        "dd96c9df-25da-4f5d-ac65-3b163d135b38.err",
+                        "f6f6968c-e802-4137-a10d-2ae737eddebe.out",
+                        "4da221f0-a5d8-4f24-9cda-3b013239d66c.err",
+                        "dde42d4e-8d5b-4174-bf5d-425128e66900.out",
+                        "4a087fa7-2333-4902-beae-be302100b3a1.err",
+                        "563cff35-e28e-4bf0-83e5-aac9108e36ae.out",
+                        "c1a3183a-61f9-48cd-89b6-f9e8aae54df0.err",
+                        "8fa5615a-476b-4faf-b717-6a0d9024b64a.out",
+                        "d44f2e9d-b3a5-4fd6-98ea-c2edf9ee93f0.err",
+                        "6fc57ccc-6370-4fd7-95d3-f5e3b37b4b65.out",
+                        "a70457fc-0db8-49a1-bc8e-87a7bf45078e.err",
+                        "8a694d52-b9da-4b58-a5cc-0ff8d3de8d24.out",
+                        "7795f3e2-22de-4bf0-ba22-a5e4abee48a0.err",
+                        "d914fb0e-6240-42ea-8df7-3dbb76b45908.out",
+                        "6fb27ec1-069f-48f8-aa09-45be63a644f4.err",
+                        "e20b813a-0d2f-454a-bd55-9be679b80f2d.out",
+                        "c3ae9b0b-e52e-45b7-ad01-93edcca154d4.err",
+                        "76eedea3-c738-4a8d-976f-3deef461b11d.out",
+                        "07043a9f-50e1-46d1-903b-45ce00b1642c.err",
+                        "e6eea97f-ec39-4240-b940-9214d5ac4e46.out",
+                        "e0747c02-7e26-426c-916c-0448ccafd244.err",
+                        "371e8ea7-ec3f-45e4-9144-959edd943fea.out",
+                        "b46ac5f2-3db9-4a33-b403-d9d58ea13479.err",
+                        "c6a31f5f-cb0b-4124-8103-8b2139b7532a.out",
+                        "0cdb97da-0459-4a11-92e4-c4728edfbaed.err",
+                        "1d1d5f34-c1a5-4764-bcb9-3b3f4bb7af2d.out",
+                        "fc339ae2-bb5e-4008-a936-ec0b71ea7c79.err",
+                        "9155378e-6baf-4c30-948b-29cadb510447.out",
+                        "beafdf43-4f77-4beb-8f49-df8436bfa1c0.err",
+                        "2c2098c5-0319-4693-99f2-8b62b84d7534.out",
+                        "56f7cca9-4f6a-4cc5-a2fa-f0e5120d6c33.err",
+                        "3c759960-c6e3-45b1-b4dc-11995bba75b6.out",
+                        "8cc388b6-7eef-43b3-afc0-091636bdce52.err",
+                        "4ffc6c1a-6605-4984-9312-30d8be486775.out",
+                        "6fa87c95-f9ce-49c5-879f-da37f0fedaba.err",
+                        "be7dd0d4-737a-4f88-af12-b33fc68dac3c.out",
+                        "057c383f-a2f0-4fcb-9f56-3e1458726d9b.err",
+                        "05dcad7b-13a0-4086-b695-f3530eabec5d.out",
+                        "adfad723-af55-40d6-a31c-156625727b0d.err",
+                        "2b0fe0c7-4e80-4574-ab47-8c09698159eb.out",
+                        "86189d14-1fc2-4306-ae6e-ae1f3b1feab3.err",
+                        "8587d9a3-ed55-41f1-9f64-2a27ef4b0c4b.out",
+                        "157266a3-26b3-4182-b632-2bde5143794c.err",
+                        "ca6ada99-6775-4193-85b2-ce735e048e70.out",
+                        "212d5bb5-eb7f-4cb7-8d9b-4e9790e575f4.err",
+                        "16e2ced0-6c17-4f55-a7c5-b59ed2e68fc7.out",
+                        "4a66d431-0233-4a15-ae1d-3572670cf050.err",
+                        "ec268ad2-652b-46bc-a8bb-7118617c7284.out",
+                        "f5000f95-0587-4105-b9fb-ac721dc7b321.err",
+                        "4ba48739-d0bf-47c4-a987-4e59389d426f.out",
+                        "72f73e55-0eb1-4a4c-9793-5f7dd126cd0f.err",
+                        "5d088d95-4121-4ae7-8c19-153594d870ed.out",
+                        "16f1ab26-2b3a-4958-ac93-0ad0a4ee5a3c.err",
+                        "46c8f6a3-e6fe-4602-8908-50435056bcb9cat_blast"
+                    ],
+                    "outputFiles": [
+                        "508e8dc6-94a3-409d-ad1d-2a4b37c320a0None"
+                    ]
+                },
+                {
+                    "name": "cat",
+                    "id": "cat_00000043",
+                    "parents": [
+                        "blastall_00000002",
+                        "blastall_00000003",
+                        "blastall_00000004",
+                        "blastall_00000005",
+                        "blastall_00000006",
+                        "blastall_00000007",
+                        "blastall_00000008",
+                        "blastall_00000009",
+                        "blastall_00000010",
+                        "blastall_00000011",
+                        "blastall_00000012",
+                        "blastall_00000013",
+                        "blastall_00000014",
+                        "blastall_00000015",
+                        "blastall_00000016",
+                        "blastall_00000017",
+                        "blastall_00000018",
+                        "blastall_00000019",
+                        "blastall_00000020",
+                        "blastall_00000021",
+                        "blastall_00000022",
+                        "blastall_00000023",
+                        "blastall_00000024",
+                        "blastall_00000025",
+                        "blastall_00000026",
+                        "blastall_00000027",
+                        "blastall_00000028",
+                        "blastall_00000029",
+                        "blastall_00000030",
+                        "blastall_00000031",
+                        "blastall_00000032",
+                        "blastall_00000033",
+                        "blastall_00000034",
+                        "blastall_00000035",
+                        "blastall_00000036",
+                        "blastall_00000037",
+                        "blastall_00000038",
+                        "blastall_00000039",
+                        "blastall_00000040",
+                        "blastall_00000041",
+                        "blastall_00000044",
+                        "blastall_00000045",
+                        "blastall_00000046",
+                        "blastall_00000047",
+                        "blastall_00000048",
+                        "blastall_00000049",
+                        "blastall_00000050",
+                        "blastall_00000051",
+                        "blastall_00000052",
+                        "blastall_00000053",
+                        "blastall_00000054",
+                        "blastall_00000055",
+                        "blastall_00000056",
+                        "blastall_00000057",
+                        "blastall_00000058"
+                    ],
+                    "children": [],
+                    "inputFiles": [
+                        "26e96262-c81b-41ef-9773-da0708829b61.out",
+                        "5396d6e9-35a5-4322-8372-1f81dcf88e63.err",
+                        "f3d8cef7-e905-4e09-8763-e3adf95eac5f.out",
+                        "07f61ecd-3e8b-438d-8f3f-727dc82893c1.err",
+                        "ebed6e47-d49f-4aa0-a5d5-bd9de278b473.out",
+                        "9aa153c5-94e5-4b4b-bd18-50d574c81cc4.err",
+                        "420ea68b-cc39-4374-be8e-a9f1b805688d.out",
+                        "237b2d7a-f125-4d91-b166-0895f59ef02a.err",
+                        "49eb3e9e-dbde-422f-879f-17b45cdeaba6.out",
+                        "67e151d5-349b-4095-91c5-50f1991b4c4c.err",
+                        "5873d7da-3220-4ea3-a920-9995a187d030.out",
+                        "b0cec361-4d07-480d-a2a4-0f4945be98fa.err",
+                        "a3d4083e-923d-4b52-a4d0-e82f15d435c3.out",
+                        "310e7418-7638-4398-b61b-50534de33090.err",
+                        "282ecbae-c1e8-441d-b696-979018f97a29.out",
+                        "2995a958-ceb5-4110-99d5-bea27bb73d2c.err",
+                        "e5c15d61-351e-4f7e-9439-00744844c6b0.out",
+                        "956d8716-421d-4b47-9e85-ae35455a34c1.err",
+                        "a3c49823-5d91-43eb-bd1d-fcf3209909c6.out",
+                        "12f08436-27bc-461c-a766-6df4c115a518.err",
+                        "9e63a8b7-f9a8-442e-9589-ddc954cd2f3a.out",
+                        "35b0b956-2207-404d-b666-bcc6b19ff7ca.err",
+                        "4938f494-267b-43d6-ab2b-7067fef1fac2.out",
+                        "f0a9fbae-6b89-417d-9535-ed1331eaab8d.err",
+                        "44d89c94-ecb6-4eb3-abb0-df3606079c72.out",
+                        "5791886f-4d62-4271-a4b3-30f9b6ffb83f.err",
+                        "3f6f044a-825a-417f-ae27-c8b375ff9ba1.out",
+                        "12ca251c-fcfa-4159-bc21-54224a9bc79a.err",
+                        "04c50ade-b2f2-4621-81b8-62e7284918f5.out",
+                        "44423e09-cac2-4839-a73e-233d8e30f9d6.err",
+                        "d6260abb-0143-45cf-a0d1-d1bf99d6d168.out",
+                        "d678034c-ed2e-4645-9e60-0eb0b7eea85e.err",
+                        "a2f68a77-2ce4-43ad-9262-07a73ca8147a.out",
+                        "9b2cab66-9e99-49a3-b401-e71092f16361.err",
+                        "dc83f7da-ce8d-446e-a190-51684829c00f.out",
+                        "2fdc914a-871b-42f0-bbaf-6ae6ab6eeac6.err",
+                        "c4d76870-62f4-4f2c-923a-daa6ed9a802e.out",
+                        "aa3959f7-05c6-44d3-98e3-13f3739597b8.err",
+                        "18260b69-091e-4f1e-8530-e9a61170bc03.out",
+                        "e99fd207-0a85-42a4-9d86-a5201c3602ac.err",
+                        "a1988053-3a38-4e45-890f-aad31c6424bd.out",
+                        "eb419cd9-47af-4da2-a4f9-3dbbfbf5ff0c.err",
+                        "fd1c9947-4da8-414f-bedb-51ee42140306.out",
+                        "91dacf32-f997-4ab4-8463-cdf95b96d070.err",
+                        "ed89c06e-2ea6-4580-80ab-609f96f95c42.out",
+                        "b206ea14-eda6-4401-9840-6404187d2133.err",
+                        "c357af39-6f75-4f4a-9c85-9cfad6d299cb.out",
+                        "88ceb653-6ad5-441a-89b2-45d10d7e479d.err",
+                        "feb98913-b8ee-4310-861b-f6749e28db72.out",
+                        "129f4563-5d78-40c3-b00d-f4902dd4135e.err",
+                        "7989c9d0-93a6-44ba-999e-f550238dfc10.out",
+                        "7e2ab72e-af3d-4911-a04d-f199b24bc206.err",
+                        "b9912878-d907-49bc-854a-b48647a0027b.out",
+                        "92b0cdea-a737-42ef-9cce-44a91bf73b90.err",
+                        "6580f96c-bd6c-4737-aa26-22c56eaef852.out",
+                        "2026fa11-f26c-443c-948d-f1d5be5a536d.err",
+                        "f2b6a959-423b-4cef-9c16-7a5736856081.out",
+                        "dd96c9df-25da-4f5d-ac65-3b163d135b38.err",
+                        "f6f6968c-e802-4137-a10d-2ae737eddebe.out",
+                        "4da221f0-a5d8-4f24-9cda-3b013239d66c.err",
+                        "dde42d4e-8d5b-4174-bf5d-425128e66900.out",
+                        "4a087fa7-2333-4902-beae-be302100b3a1.err",
+                        "563cff35-e28e-4bf0-83e5-aac9108e36ae.out",
+                        "c1a3183a-61f9-48cd-89b6-f9e8aae54df0.err",
+                        "8fa5615a-476b-4faf-b717-6a0d9024b64a.out",
+                        "d44f2e9d-b3a5-4fd6-98ea-c2edf9ee93f0.err",
+                        "6fc57ccc-6370-4fd7-95d3-f5e3b37b4b65.out",
+                        "a70457fc-0db8-49a1-bc8e-87a7bf45078e.err",
+                        "8a694d52-b9da-4b58-a5cc-0ff8d3de8d24.out",
+                        "7795f3e2-22de-4bf0-ba22-a5e4abee48a0.err",
+                        "d914fb0e-6240-42ea-8df7-3dbb76b45908.out",
+                        "6fb27ec1-069f-48f8-aa09-45be63a644f4.err",
+                        "e20b813a-0d2f-454a-bd55-9be679b80f2d.out",
+                        "c3ae9b0b-e52e-45b7-ad01-93edcca154d4.err",
+                        "76eedea3-c738-4a8d-976f-3deef461b11d.out",
+                        "07043a9f-50e1-46d1-903b-45ce00b1642c.err",
+                        "e6eea97f-ec39-4240-b940-9214d5ac4e46.out",
+                        "e0747c02-7e26-426c-916c-0448ccafd244.err",
+                        "371e8ea7-ec3f-45e4-9144-959edd943fea.out",
+                        "b46ac5f2-3db9-4a33-b403-d9d58ea13479.err",
+                        "c6a31f5f-cb0b-4124-8103-8b2139b7532a.out",
+                        "0cdb97da-0459-4a11-92e4-c4728edfbaed.err",
+                        "1d1d5f34-c1a5-4764-bcb9-3b3f4bb7af2d.out",
+                        "fc339ae2-bb5e-4008-a936-ec0b71ea7c79.err",
+                        "9155378e-6baf-4c30-948b-29cadb510447.out",
+                        "beafdf43-4f77-4beb-8f49-df8436bfa1c0.err",
+                        "2c2098c5-0319-4693-99f2-8b62b84d7534.out",
+                        "56f7cca9-4f6a-4cc5-a2fa-f0e5120d6c33.err",
+                        "3c759960-c6e3-45b1-b4dc-11995bba75b6.out",
+                        "8cc388b6-7eef-43b3-afc0-091636bdce52.err",
+                        "4ffc6c1a-6605-4984-9312-30d8be486775.out",
+                        "6fa87c95-f9ce-49c5-879f-da37f0fedaba.err",
+                        "be7dd0d4-737a-4f88-af12-b33fc68dac3c.out",
+                        "057c383f-a2f0-4fcb-9f56-3e1458726d9b.err",
+                        "05dcad7b-13a0-4086-b695-f3530eabec5d.out",
+                        "adfad723-af55-40d6-a31c-156625727b0d.err",
+                        "2b0fe0c7-4e80-4574-ab47-8c09698159eb.out",
+                        "86189d14-1fc2-4306-ae6e-ae1f3b1feab3.err",
+                        "8587d9a3-ed55-41f1-9f64-2a27ef4b0c4b.out",
+                        "157266a3-26b3-4182-b632-2bde5143794c.err",
+                        "ca6ada99-6775-4193-85b2-ce735e048e70.out",
+                        "212d5bb5-eb7f-4cb7-8d9b-4e9790e575f4.err",
+                        "16e2ced0-6c17-4f55-a7c5-b59ed2e68fc7.out",
+                        "4a66d431-0233-4a15-ae1d-3572670cf050.err",
+                        "ec268ad2-652b-46bc-a8bb-7118617c7284.out",
+                        "f5000f95-0587-4105-b9fb-ac721dc7b321.err",
+                        "4ba48739-d0bf-47c4-a987-4e59389d426f.out",
+                        "72f73e55-0eb1-4a4c-9793-5f7dd126cd0f.err",
+                        "5d088d95-4121-4ae7-8c19-153594d870ed.out",
+                        "16f1ab26-2b3a-4958-ac93-0ad0a4ee5a3c.err"
+                    ],
+                    "outputFiles": [
+                        "a9d45802-4c87-4f3f-ab40-80f1bdc9d2de.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000044",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "9e9e7103-d3bc-4a06-9b83-8a80ce1b84e8blastall",
+                        "15192fb7-244b-4169-8fed-3c1e2325937fnt"
+                    ],
+                    "outputFiles": [
+                        "c6a31f5f-cb0b-4124-8103-8b2139b7532a.out",
+                        "0cdb97da-0459-4a11-92e4-c4728edfbaed.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000045",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "f3bc581a-4411-48d3-a508-59fd9374c043blastall",
+                        "b3dbd291-3e8b-461d-996e-234415c1dd2dnt"
+                    ],
+                    "outputFiles": [
+                        "1d1d5f34-c1a5-4764-bcb9-3b3f4bb7af2d.out",
+                        "fc339ae2-bb5e-4008-a936-ec0b71ea7c79.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000046",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "6b0b1ab8-8775-4a9b-b6ce-a3b514fff1ebblastall",
+                        "e1dbb862-0c87-4d35-89e5-9da2819f36d0nt"
+                    ],
+                    "outputFiles": [
+                        "9155378e-6baf-4c30-948b-29cadb510447.out",
+                        "beafdf43-4f77-4beb-8f49-df8436bfa1c0.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000047",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "1f1db81b-082a-45fc-bc87-4a6822abcd11blastall",
+                        "b1ea876e-d4ec-4f11-ae68-a5d447b4b5cbnt"
+                    ],
+                    "outputFiles": [
+                        "2c2098c5-0319-4693-99f2-8b62b84d7534.out",
+                        "56f7cca9-4f6a-4cc5-a2fa-f0e5120d6c33.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000048",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "b74db3f7-da45-4db6-b4f5-cb2a57cbbc3fblastall",
+                        "976017ee-d698-4acd-895c-de6fcfa1aaa8nt"
+                    ],
+                    "outputFiles": [
+                        "3c759960-c6e3-45b1-b4dc-11995bba75b6.out",
+                        "8cc388b6-7eef-43b3-afc0-091636bdce52.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000049",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "bb68b53e-0ea3-4f85-9e0b-cc725aaabcf8blastall",
+                        "d8f87b10-5aad-4da2-a14e-1dda2d1f4d20nt"
+                    ],
+                    "outputFiles": [
+                        "4ffc6c1a-6605-4984-9312-30d8be486775.out",
+                        "6fa87c95-f9ce-49c5-879f-da37f0fedaba.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000050",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "91f78210-f082-4b68-ae36-97dba26f7843blastall",
+                        "e2c517a6-1e2e-412c-82aa-c26a7260148fnt"
+                    ],
+                    "outputFiles": [
+                        "be7dd0d4-737a-4f88-af12-b33fc68dac3c.out",
+                        "057c383f-a2f0-4fcb-9f56-3e1458726d9b.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000051",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "302280d2-8621-465e-8013-eec0b65291fbblastall",
+                        "45290aee-2726-4451-bbdf-e1e155ed350ent"
+                    ],
+                    "outputFiles": [
+                        "05dcad7b-13a0-4086-b695-f3530eabec5d.out",
+                        "adfad723-af55-40d6-a31c-156625727b0d.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000052",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "45f080c2-4c40-420a-86b4-09afd7a773e5blastall",
+                        "659297cc-f7d8-4263-a339-c70fc5892d79nt"
+                    ],
+                    "outputFiles": [
+                        "2b0fe0c7-4e80-4574-ab47-8c09698159eb.out",
+                        "86189d14-1fc2-4306-ae6e-ae1f3b1feab3.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000053",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "1932b7e1-62a5-4ca2-9fe6-ff68a309c570blastall",
+                        "2371bf2d-995b-43d5-8115-a8719bed878cnt"
+                    ],
+                    "outputFiles": [
+                        "8587d9a3-ed55-41f1-9f64-2a27ef4b0c4b.out",
+                        "157266a3-26b3-4182-b632-2bde5143794c.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000054",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "51f0b745-a2b3-4436-9790-b44fb04252dbblastall",
+                        "80e078bb-00d9-41ed-a505-a3e1b9d7b90dnt"
+                    ],
+                    "outputFiles": [
+                        "ca6ada99-6775-4193-85b2-ce735e048e70.out",
+                        "212d5bb5-eb7f-4cb7-8d9b-4e9790e575f4.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000055",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "9d4438f8-5258-4e24-bc02-55b7cad93912blastall",
+                        "92aa3852-cc33-4371-adc5-cf452b755248nt"
+                    ],
+                    "outputFiles": [
+                        "16e2ced0-6c17-4f55-a7c5-b59ed2e68fc7.out",
+                        "4a66d431-0233-4a15-ae1d-3572670cf050.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000056",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "29de20c8-33e3-4cfb-8ff1-6d22e4d8d460blastall",
+                        "e08a3578-4bfd-4bfa-9819-040b4a5a7a78nt"
+                    ],
+                    "outputFiles": [
+                        "ec268ad2-652b-46bc-a8bb-7118617c7284.out",
+                        "f5000f95-0587-4105-b9fb-ac721dc7b321.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000057",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "cf2a50fa-a22f-4973-b912-0eb362bb05edblastall",
+                        "cd47a363-d134-43c5-9579-53d1f7d783b4nt"
+                    ],
+                    "outputFiles": [
+                        "4ba48739-d0bf-47c4-a987-4e59389d426f.out",
+                        "72f73e55-0eb1-4a4c-9793-5f7dd126cd0f.err"
+                    ]
+                },
+                {
+                    "name": "blastall",
+                    "id": "blastall_00000058",
+                    "parents": [
+                        "split_fasta_00000001"
+                    ],
+                    "children": [
+                        "cat_blast_00000042",
+                        "cat_00000043"
+                    ],
+                    "inputFiles": [
+                        "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                        "dce3b568-9050-4554-9877-4a4c6852b6afblastall",
+                        "c30349fd-8060-4e11-8974-2e56aa6a114fnt"
+                    ],
+                    "outputFiles": [
+                        "5d088d95-4121-4ae7-8c19-153594d870ed.out",
+                        "16f1ab26-2b3a-4958-ac93-0ad0a4ee5a3c.err"
+                    ]
+                }
+            ],
+            "files": [
+                {
+                    "id": "5396d6e9-35a5-4322-8372-1f81dcf88e63.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "63fe2784-eba3-4e97-b538-023f6b68e8ednt",
+                    "sizeInBytes": 4350253548
+                },
+                {
+                    "id": "7795f3e2-22de-4bf0-ba22-a5e4abee48a0.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "d6260abb-0143-45cf-a0d1-d1bf99d6d168.out",
+                    "sizeInBytes": 1795
+                },
+                {
+                    "id": "15192fb7-244b-4169-8fed-3c1e2325937fnt",
+                    "sizeInBytes": 5214924188
+                },
+                {
+                    "id": "302280d2-8621-465e-8013-eec0b65291fbblastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "29a807a0-6ac2-4834-8334-efecd626e0bent",
+                    "sizeInBytes": 3816775449
+                },
+                {
+                    "id": "ff5c8e6a-9eeb-4318-9b2c-a79c8851cefablastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "05dcad7b-13a0-4086-b695-f3530eabec5d.out",
+                    "sizeInBytes": 1795
+                },
+                {
+                    "id": "8ae49893-c94e-40ea-9c73-8e26e071a2f1blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "a1988053-3a38-4e45-890f-aad31c6424bd.out",
+                    "sizeInBytes": 9551
+                },
+                {
+                    "id": "310e7418-7638-4398-b61b-50534de33090.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "508e8dc6-94a3-409d-ad1d-2a4b37c320a0None",
+                    "sizeInBytes": 56594
+                },
+                {
+                    "id": "18c4b22f-4ae0-4af8-94dd-7342bb7585d1blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "bd38ab36-49c0-43ba-85cc-6336bf4b7779nt",
+                    "sizeInBytes": 3049182761
+                },
+                {
+                    "id": "adfad723-af55-40d6-a31c-156625727b0d.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "e08a3578-4bfd-4bfa-9819-040b4a5a7a78nt",
+                    "sizeInBytes": 5122002451
+                },
+                {
+                    "id": "56f7cca9-4f6a-4cc5-a2fa-f0e5120d6c33.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "b74db3f7-da45-4db6-b4f5-cb2a57cbbc3fblastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "f6f6968c-e802-4137-a10d-2ae737eddebe.out",
+                    "sizeInBytes": 10379
+                },
+                {
+                    "id": "07043a9f-50e1-46d1-903b-45ce00b1642c.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "fe0fc4f2-d1b6-490f-a6d2-21fe4049de22blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "2b0fe0c7-4e80-4574-ab47-8c09698159eb.out",
+                    "sizeInBytes": 14374
+                },
+                {
+                    "id": "92aa3852-cc33-4371-adc5-cf452b755248nt",
+                    "sizeInBytes": 2965841769
+                },
+                {
+                    "id": "0ebaea20-a6d6-4908-b463-fb9de2077feeblastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "57880d88-723b-4691-bc61-19310f410b61blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "e6eea97f-ec39-4240-b940-9214d5ac4e46.out",
+                    "sizeInBytes": 1795
+                },
+                {
+                    "id": "7e981e08-557f-4830-86bc-7f92101e2d06blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "5d088d95-4121-4ae7-8c19-153594d870ed.out",
+                    "sizeInBytes": 10664
+                },
+                {
+                    "id": "6b1d0dbc-0a38-4313-84e9-1911ab63445ant",
+                    "sizeInBytes": 1479845488
+                },
+                {
+                    "id": "57ba4f0e-68fd-4843-b9b8-2eebe97b2013blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "430f5a31-5081-4e46-b12a-76bbbdc9ef85nt",
+                    "sizeInBytes": 4063565994
+                },
+                {
+                    "id": "96544db7-a518-4cb5-93a1-3acb538a1fbent",
+                    "sizeInBytes": 2115275600
+                },
+                {
+                    "id": "e5c15d61-351e-4f7e-9439-00744844c6b0.out",
+                    "sizeInBytes": 1795
+                },
+                {
+                    "id": "70fb42be-02f6-44be-8c05-3f7d80b0a96ent",
+                    "sizeInBytes": 4703309219
+                },
+                {
+                    "id": "155e149d-ff4e-40a1-acd7-fbecdde76376blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "fd1c9947-4da8-414f-bedb-51ee42140306.out",
+                    "sizeInBytes": 7263
+                },
+                {
+                    "id": "6fb27ec1-069f-48f8-aa09-45be63a644f4.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "9d4438f8-5258-4e24-bc02-55b7cad93912blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "26e96262-c81b-41ef-9773-da0708829b61.out",
+                    "sizeInBytes": 8071
+                },
+                {
+                    "id": "956d8716-421d-4b47-9e85-ae35455a34c1.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "563cff35-e28e-4bf0-83e5-aac9108e36ae.out",
+                    "sizeInBytes": 11158
+                },
+                {
+                    "id": "52dfcf06-08eb-4df3-8cfa-107ad8e8668cnt",
+                    "sizeInBytes": 3165916910
+                },
+                {
+                    "id": "6fa87c95-f9ce-49c5-879f-da37f0fedaba.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "f5000f95-0587-4105-b9fb-ac721dc7b321.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "c357af39-6f75-4f4a-9c85-9cfad6d299cb.out",
+                    "sizeInBytes": 11588
+                },
+                {
+                    "id": "057c383f-a2f0-4fcb-9f56-3e1458726d9b.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "b46ac5f2-3db9-4a33-b403-d9d58ea13479.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "2fdc914a-871b-42f0-bbaf-6ae6ab6eeac6.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "9a47e48a-871f-43fd-a6c6-0294d95a5a2ant",
+                    "sizeInBytes": 3130735116
+                },
+                {
+                    "id": "806f7525-c46a-41b8-8b61-48271de70bd4blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "e012a67f-a60b-40b1-83bb-e9892ba06d99nt",
+                    "sizeInBytes": 4706154046
+                },
+                {
+                    "id": "e20b813a-0d2f-454a-bd55-9be679b80f2d.out",
+                    "sizeInBytes": 1795
+                },
+                {
+                    "id": "dd96c9df-25da-4f5d-ac65-3b163d135b38.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "fb1c8a45-75d3-4fbd-8457-405de51ca059nt",
+                    "sizeInBytes": 3902777709
+                },
+                {
+                    "id": "12f08436-27bc-461c-a766-6df4c115a518.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "5873d7da-3220-4ea3-a920-9995a187d030.out",
+                    "sizeInBytes": 15096
+                },
+                {
+                    "id": "8fa5615a-476b-4faf-b717-6a0d9024b64a.out",
+                    "sizeInBytes": 11253
+                },
+                {
+                    "id": "22c04a46-2725-42fc-96e4-1c07ba7fcd56blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "4ffc6c1a-6605-4984-9312-30d8be486775.out",
+                    "sizeInBytes": 1795
+                },
+                {
+                    "id": "c9eae7f5-ed4b-4749-ac3e-c3b2705027d9blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "41fb657b-12b4-4e8e-a708-d3da5f051ad4blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "91f78210-f082-4b68-ae36-97dba26f7843blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "44d89c94-ecb6-4eb3-abb0-df3606079c72.out",
+                    "sizeInBytes": 16609
+                },
+                {
+                    "id": "baa14aa4-05d3-4c39-b0cc-11681a8f2c78blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "7989c9d0-93a6-44ba-999e-f550238dfc10.out",
+                    "sizeInBytes": 1795
+                },
+                {
+                    "id": "91dacf32-f997-4ab4-8463-cdf95b96d070.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "4b784c3d-d509-41b0-86ed-938e60dc9cdfblastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "14b4c9d1-7abd-47d0-81d0-acc8d53eda32nt",
+                    "sizeInBytes": 4366253274
+                },
+                {
+                    "id": "0cdb97da-0459-4a11-92e4-c4728edfbaed.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "c8f8f0d5-16ee-43ad-899e-685f6147d333blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "9e9e7103-d3bc-4a06-9b83-8a80ce1b84e8blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "0dc0ddf1-1ffb-46f0-8923-5aaebc831e87nt",
+                    "sizeInBytes": 4395451993
+                },
+                {
+                    "id": "1a60d033-a1fd-4b64-987a-793de6beecb4nt",
+                    "sizeInBytes": 3139527931
+                },
+                {
+                    "id": "28fbe948-2f29-4b9f-8992-da5177c8ad73nt",
+                    "sizeInBytes": 3281761733
+                },
+                {
+                    "id": "b206ea14-eda6-4401-9840-6404187d2133.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "a63aaac9-5c04-4f0b-9ad9-67acac742b57nt",
+                    "sizeInBytes": 4311107113
+                },
+                {
+                    "id": "04c50ade-b2f2-4621-81b8-62e7284918f5.out",
+                    "sizeInBytes": 1795
+                },
+                {
+                    "id": "bb68b53e-0ea3-4f85-9e0b-cc725aaabcf8blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "c3ae9b0b-e52e-45b7-ad01-93edcca154d4.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "76eedea3-c738-4a8d-976f-3deef461b11d.out",
+                    "sizeInBytes": 11493
+                },
+                {
+                    "id": "a2f68a77-2ce4-43ad-9262-07a73ca8147a.out",
+                    "sizeInBytes": 10145
+                },
+                {
+                    "id": "c70a1fd2-16ca-472d-b987-5e69922ba8cdblastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "d20a34e3-361a-42c6-ab35-2865afdf7f22nt",
+                    "sizeInBytes": 4981021283
+                },
+                {
+                    "id": "a3d4083e-923d-4b52-a4d0-e82f15d435c3.out",
+                    "sizeInBytes": 1795
+                },
+                {
+                    "id": "c89ff8ba-ed01-4c5e-b410-7fc84c967f8cblastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "a9d45802-4c87-4f3f-ab40-80f1bdc9d2de.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "6150aab6-d043-420a-91bd-e30064a60e7a.fasta",
+                    "sizeInBytes": 183950
+                },
+                {
+                    "id": "d41c5be8-d040-4a3b-8487-66d4dc1cae20nt",
+                    "sizeInBytes": 2740251335
+                },
+                {
+                    "id": "2026fa11-f26c-443c-948d-f1d5be5a536d.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "80e078bb-00d9-41ed-a505-a3e1b9d7b90dnt",
+                    "sizeInBytes": 2370955565
+                },
+                {
+                    "id": "c1a3183a-61f9-48cd-89b6-f9e8aae54df0.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "82d89a4d-3239-4b74-981b-06e8b271e833nt",
+                    "sizeInBytes": 1928496643
+                },
+                {
+                    "id": "1f1db81b-082a-45fc-bc87-4a6822abcd11blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "1932b7e1-62a5-4ca2-9fe6-ff68a309c570blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "a2ab5be5-958e-4fc3-80d0-334c09d6b62cblastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "f2b6a959-423b-4cef-9c16-7a5736856081.out",
+                    "sizeInBytes": 3255
+                },
+                {
+                    "id": "4da221f0-a5d8-4f24-9cda-3b013239d66c.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "659297cc-f7d8-4263-a339-c70fc5892d79nt",
+                    "sizeInBytes": 4465030410
+                },
+                {
+                    "id": "b976408a-cbc5-4736-898e-a95feaa4cbc8blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "beafdf43-4f77-4beb-8f49-df8436bfa1c0.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "f3bc581a-4411-48d3-a508-59fd9374c043blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "ffbae9fd-6c18-47cc-88bd-907562238899nt",
+                    "sizeInBytes": 2905881189
+                },
+                {
+                    "id": "39d03d20-51eb-46a0-b8af-24cc384b2f93.fasta",
+                    "sizeInBytes": 1047
+                },
+                {
+                    "id": "6c3d4bd7-4f88-44c1-ab9d-182f00a5e827nt",
+                    "sizeInBytes": 2400173798
+                },
+                {
+                    "id": "c30349fd-8060-4e11-8974-2e56aa6a114fnt",
+                    "sizeInBytes": 2496128092
+                },
+                {
+                    "id": "07f61ecd-3e8b-438d-8f3f-727dc82893c1.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "2995a958-ceb5-4110-99d5-bea27bb73d2c.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "5791886f-4d62-4271-a4b3-30f9b6ffb83f.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "e2c517a6-1e2e-412c-82aa-c26a7260148fnt",
+                    "sizeInBytes": 1244025305
+                },
+                {
+                    "id": "df76ac7e-981c-4543-8df0-18d5bdf46e71split_fasta",
+                    "sizeInBytes": 1
+                },
+                {
+                    "id": "282ecbae-c1e8-441d-b696-979018f97a29.out",
+                    "sizeInBytes": 15390
+                },
+                {
+                    "id": "3c759960-c6e3-45b1-b4dc-11995bba75b6.out",
+                    "sizeInBytes": 9110
+                },
+                {
+                    "id": "29de20c8-33e3-4cfb-8ff1-6d22e4d8d460blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "d678034c-ed2e-4645-9e60-0eb0b7eea85e.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "feb98913-b8ee-4310-861b-f6749e28db72.out",
+                    "sizeInBytes": 1795
+                },
+                {
+                    "id": "9a0546bc-5855-4800-ab56-c4163bdfd21eblastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "371e8ea7-ec3f-45e4-9144-959edd943fea.out",
+                    "sizeInBytes": 13494
+                },
+                {
+                    "id": "c4d76870-62f4-4f2c-923a-daa6ed9a802e.out",
+                    "sizeInBytes": 1795
+                },
+                {
+                    "id": "4a66d431-0233-4a15-ae1d-3572670cf050.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "eb419cd9-47af-4da2-a4f9-3dbbfbf5ff0c.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "4ba48739-d0bf-47c4-a987-4e59389d426f.out",
+                    "sizeInBytes": 4199
+                },
+                {
+                    "id": "b1ea876e-d4ec-4f11-ae68-a5d447b4b5cbnt",
+                    "sizeInBytes": 5290090937
+                },
+                {
+                    "id": "51f0b745-a2b3-4436-9790-b44fb04252dbblastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "86189d14-1fc2-4306-ae6e-ae1f3b1feab3.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "ec50649d-b80c-4815-aae2-9977b6762e2eblastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "b5d24e78-917c-4c1b-b7be-d6457e6bcd07nt",
+                    "sizeInBytes": 4497471866
+                },
+                {
+                    "id": "f0a9fbae-6b89-417d-9535-ed1331eaab8d.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "aa3959f7-05c6-44d3-98e3-13f3739597b8.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "f25c4208-bcb5-4ca9-84b5-851624363d7cblastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "6f7691d2-972a-4353-813a-12a008d87aecnt",
+                    "sizeInBytes": 1499942374
+                },
+                {
+                    "id": "16e2ced0-6c17-4f55-a7c5-b59ed2e68fc7.out",
+                    "sizeInBytes": 11261
+                },
+                {
+                    "id": "74c0c1cf-3a1d-4748-ab1c-fa6dccd80288blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "4938f494-267b-43d6-ab2b-7067fef1fac2.out",
+                    "sizeInBytes": 5841
+                },
+                {
+                    "id": "dc83f7da-ce8d-446e-a190-51684829c00f.out",
+                    "sizeInBytes": 1795
+                },
+                {
+                    "id": "733ebc86-945f-4a92-bc2b-3c888174b599blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "45290aee-2726-4451-bbdf-e1e155ed350ent",
+                    "sizeInBytes": 4245047147
+                },
+                {
+                    "id": "ebed6e47-d49f-4aa0-a5d5-bd9de278b473.out",
+                    "sizeInBytes": 15082
+                },
+                {
+                    "id": "e0590c46-d8ec-4a9e-a131-e0f0b761f22cblastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "be7dd0d4-737a-4f88-af12-b33fc68dac3c.out",
+                    "sizeInBytes": 2489
+                },
+                {
+                    "id": "b3dbd291-3e8b-461d-996e-234415c1dd2dnt",
+                    "sizeInBytes": 5014347922
+                },
+                {
+                    "id": "129f4563-5d78-40c3-b00d-f4902dd4135e.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "a3c49823-5d91-43eb-bd1d-fcf3209909c6.out",
+                    "sizeInBytes": 6305
+                },
+                {
+                    "id": "a556b116-8a69-4cc8-9719-87f164ebec66blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "46c8f6a3-e6fe-4602-8908-50435056bcb9cat_blast",
+                    "sizeInBytes": 1
+                },
+                {
+                    "id": "cba19f1f-4782-4321-a496-931ac5841253blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "3a1b1d0a-50ce-40c9-b6de-42a710b93321blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "9a9028c9-328f-4fa1-aea3-af83940726b9nt",
+                    "sizeInBytes": 5315431173
+                },
+                {
+                    "id": "212d5bb5-eb7f-4cb7-8d9b-4e9790e575f4.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "72f73e55-0eb1-4a4c-9793-5f7dd126cd0f.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "aca513f1-04a1-4b74-83ad-adefe0e15f63blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "18260b69-091e-4f1e-8530-e9a61170bc03.out",
+                    "sizeInBytes": 4846
+                },
+                {
+                    "id": "cb14fa55-696c-4476-9b39-b967b87a202cnt",
+                    "sizeInBytes": 511770449
+                },
+                {
+                    "id": "bca08c19-b898-4525-ad62-a894e89ff0cablastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "32d976ef-7295-4348-9946-e54a4561e2cbblastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "cf2a50fa-a22f-4973-b912-0eb362bb05edblastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "9e63a8b7-f9a8-442e-9589-ddc954cd2f3a.out",
+                    "sizeInBytes": 1795
+                },
+                {
+                    "id": "f2667f0c-4a21-437f-beba-cb9c38c6bddbblastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "92b0cdea-a737-42ef-9cce-44a91bf73b90.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "7d6cc9e2-0483-4312-a076-9f095bc0c926nt",
+                    "sizeInBytes": 5563488276
+                },
+                {
+                    "id": "49eb3e9e-dbde-422f-879f-17b45cdeaba6.out",
+                    "sizeInBytes": 1795
+                },
+                {
+                    "id": "8587d9a3-ed55-41f1-9f64-2a27ef4b0c4b.out",
+                    "sizeInBytes": 12952
+                },
+                {
+                    "id": "9aa153c5-94e5-4b4b-bd18-50d574c81cc4.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "ad5627db-ed33-4100-a431-5bd5e02209bbnt",
+                    "sizeInBytes": 1586431136
+                },
+                {
+                    "id": "2ebe004a-ea4a-4de9-9017-68e7b8194728nt",
+                    "sizeInBytes": 3851579495
+                },
+                {
+                    "id": "420ea68b-cc39-4374-be8e-a9f1b805688d.out",
+                    "sizeInBytes": 12100
+                },
+                {
+                    "id": "d8f87b10-5aad-4da2-a14e-1dda2d1f4d20nt",
+                    "sizeInBytes": 5246789307
+                },
+                {
+                    "id": "d71f6f10-aeb7-4f09-b09b-d008e36e71b2nt",
+                    "sizeInBytes": 5075425175
+                },
+                {
+                    "id": "462c3fb3-3136-4134-8fbe-512807f360e4nt",
+                    "sizeInBytes": 2887354972
+                },
+                {
+                    "id": "35b0b956-2207-404d-b666-bcc6b19ff7ca.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "8cc388b6-7eef-43b3-afc0-091636bdce52.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "7e2ab72e-af3d-4911-a04d-f199b24bc206.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "b0cec361-4d07-480d-a2a4-0f4945be98fa.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "157266a3-26b3-4182-b632-2bde5143794c.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "1d799982-2347-4dab-91c9-cc79fd47f5aant",
+                    "sizeInBytes": 2953996729
+                },
+                {
+                    "id": "e1dbb862-0c87-4d35-89e5-9da2819f36d0nt",
+                    "sizeInBytes": 2482812173
+                },
+                {
+                    "id": "cd47a363-d134-43c5-9579-53d1f7d783b4nt",
+                    "sizeInBytes": 1342251101
+                },
+                {
+                    "id": "d7b6c47b-eefe-4a64-9a08-03dc5b6de5b6blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "7619fa6c-0157-4591-9b66-b28b6d7aa454nt",
+                    "sizeInBytes": 1768056900
+                },
+                {
+                    "id": "6580f96c-bd6c-4737-aa26-22c56eaef852.out",
+                    "sizeInBytes": 9910
+                },
+                {
+                    "id": "88ceb653-6ad5-441a-89b2-45d10d7e479d.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "16f1ab26-2b3a-4958-ac93-0ad0a4ee5a3c.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "edb8db29-6c4b-41e8-a885-6d1ea3314221blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "dce3b568-9050-4554-9877-4a4c6852b6afblastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "b9912878-d907-49bc-854a-b48647a0027b.out",
+                    "sizeInBytes": 1795
+                },
+                {
+                    "id": "976017ee-d698-4acd-895c-de6fcfa1aaa8nt",
+                    "sizeInBytes": 3091745935
+                },
+                {
+                    "id": "ec268ad2-652b-46bc-a8bb-7118617c7284.out",
+                    "sizeInBytes": 2306
+                },
+                {
+                    "id": "e99fd207-0a85-42a4-9d86-a5201c3602ac.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "6fc57ccc-6370-4fd7-95d3-f5e3b37b4b65.out",
+                    "sizeInBytes": 2721
+                },
+                {
+                    "id": "3e79c5d5-1468-4d22-bbe1-e98f78ef8fe0nt",
+                    "sizeInBytes": 2544189801
+                },
+                {
+                    "id": "45f080c2-4c40-420a-86b4-09afd7a773e5blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "dde42d4e-8d5b-4174-bf5d-425128e66900.out",
+                    "sizeInBytes": 13320
+                },
+                {
+                    "id": "2371bf2d-995b-43d5-8115-a8719bed878cnt",
+                    "sizeInBytes": 4011864833
+                },
+                {
+                    "id": "fc339ae2-bb5e-4008-a936-ec0b71ea7c79.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "67e151d5-349b-4095-91c5-50f1991b4c4c.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "1d1d5f34-c1a5-4764-bcb9-3b3f4bb7af2d.out",
+                    "sizeInBytes": 2054
+                },
+                {
+                    "id": "3f6f044a-825a-417f-ae27-c8b375ff9ba1.out",
+                    "sizeInBytes": 2623
+                },
+                {
+                    "id": "8a694d52-b9da-4b58-a5cc-0ff8d3de8d24.out",
+                    "sizeInBytes": 14662
+                },
+                {
+                    "id": "2c2098c5-0319-4693-99f2-8b62b84d7534.out",
+                    "sizeInBytes": 1795
+                },
+                {
+                    "id": "4a1ef503-bcd2-462e-897b-9aa80852713ent",
+                    "sizeInBytes": 3759111607
+                },
+                {
+                    "id": "92b5912d-f376-4b8d-a6de-e0b581b95600nt",
+                    "sizeInBytes": 702733839
+                },
+                {
+                    "id": "d914fb0e-6240-42ea-8df7-3dbb76b45908.out",
+                    "sizeInBytes": 12371
+                },
+                {
+                    "id": "c35dc64e-197b-46a8-a66e-04af80d1b1eeblastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "237b2d7a-f125-4d91-b166-0895f59ef02a.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "ed89c06e-2ea6-4580-80ab-609f96f95c42.out",
+                    "sizeInBytes": 17420
+                },
+                {
+                    "id": "aba88317-81f6-4fc6-aae1-0083664deb9dnt",
+                    "sizeInBytes": 1588837100
+                },
+                {
+                    "id": "f1ab2317-ac6a-48dc-b355-e9e37dcf3a54nt",
+                    "sizeInBytes": 4350739482
+                },
+                {
+                    "id": "e0747c02-7e26-426c-916c-0448ccafd244.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "f3d8cef7-e905-4e09-8763-e3adf95eac5f.out",
+                    "sizeInBytes": 4772
+                },
+                {
+                    "id": "d44f2e9d-b3a5-4fd6-98ea-c2edf9ee93f0.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "a70457fc-0db8-49a1-bc8e-87a7bf45078e.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "ca6ada99-6775-4193-85b2-ce735e048e70.out",
+                    "sizeInBytes": 2249
+                },
+                {
+                    "id": "d24d2e2a-142f-4fd0-846e-a6ac7623156bblastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "4a087fa7-2333-4902-beae-be302100b3a1.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "6547a1b5-16cf-4a8a-a4b1-c5dd560445beblastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "05426d55-dc8f-4196-8b5a-5e1338592917nt",
+                    "sizeInBytes": 2528914048
+                },
+                {
+                    "id": "15e8c41f-f764-4d9f-8f05-882fdb44ace3nt",
+                    "sizeInBytes": 511770449
+                },
+                {
+                    "id": "2807fe7a-06a8-43eb-b48f-e84ae99d02feblastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "9b2cab66-9e99-49a3-b401-e71092f16361.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "78a10c07-2eca-4c82-af06-f85042de0389nt",
+                    "sizeInBytes": 5017039373
+                },
+                {
+                    "id": "6b0b1ab8-8775-4a9b-b6ce-a3b514fff1ebblastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "12ca251c-fcfa-4159-bc21-54224a9bc79a.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "9155378e-6baf-4c30-948b-29cadb510447.out",
+                    "sizeInBytes": 5060
+                },
+                {
+                    "id": "44423e09-cac2-4839-a73e-233d8e30f9d6.err",
+                    "sizeInBytes": 0
+                },
+                {
+                    "id": "1592a797-de83-4e94-90d3-a9ba1bd80064blastall",
+                    "sizeInBytes": 7688
+                },
+                {
+                    "id": "c6a31f5f-cb0b-4124-8103-8b2139b7532a.out",
+                    "sizeInBytes": 1795
+                }
+            ]
+        },
+        "execution": {
+            "makespanInSeconds": 0.0,
+            "executedAt": "2026-06-20T18:36:22.433811+00:00",
+            "tasks": [
+                {
+                    "id": "split_fasta_00000001",
+                    "runtimeInSeconds": 0.479,
+                    "command": {
+                        "program": "split_fasta",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.437971+00:00"
+                },
+                {
+                    "id": "blastall_00000002",
+                    "runtimeInSeconds": 1916.627,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.438308+00:00"
+                },
+                {
+                    "id": "blastall_00000003",
+                    "runtimeInSeconds": 1658.615,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.438500+00:00"
+                },
+                {
+                    "id": "blastall_00000004",
+                    "runtimeInSeconds": 1481.892,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.438669+00:00"
+                },
+                {
+                    "id": "blastall_00000005",
+                    "runtimeInSeconds": 664.019,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.438830+00:00"
+                },
+                {
+                    "id": "blastall_00000006",
+                    "runtimeInSeconds": 663.953,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.438987+00:00"
+                },
+                {
+                    "id": "blastall_00000007",
+                    "runtimeInSeconds": 331.49,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.439141+00:00"
+                },
+                {
+                    "id": "blastall_00000008",
+                    "runtimeInSeconds": 1820.833,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.439289+00:00"
+                },
+                {
+                    "id": "blastall_00000009",
+                    "runtimeInSeconds": 1485.317,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.439444+00:00"
+                },
+                {
+                    "id": "blastall_00000010",
+                    "runtimeInSeconds": 1628.175,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.439606+00:00"
+                },
+                {
+                    "id": "blastall_00000011",
+                    "runtimeInSeconds": 179.956,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.439777+00:00"
+                },
+                {
+                    "id": "blastall_00000012",
+                    "runtimeInSeconds": 1937.777,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.439976+00:00"
+                },
+                {
+                    "id": "blastall_00000013",
+                    "runtimeInSeconds": 1781.308,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.440149+00:00"
+                },
+                {
+                    "id": "blastall_00000014",
+                    "runtimeInSeconds": 806.135,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.440342+00:00"
+                },
+                {
+                    "id": "blastall_00000015",
+                    "runtimeInSeconds": 731.864,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.440512+00:00"
+                },
+                {
+                    "id": "blastall_00000016",
+                    "runtimeInSeconds": 735.855,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.440668+00:00"
+                },
+                {
+                    "id": "blastall_00000017",
+                    "runtimeInSeconds": 1002.169,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.440817+00:00"
+                },
+                {
+                    "id": "blastall_00000018",
+                    "runtimeInSeconds": 1375.367,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.440969+00:00"
+                },
+                {
+                    "id": "blastall_00000019",
+                    "runtimeInSeconds": 1230.303,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.441117+00:00"
+                },
+                {
+                    "id": "blastall_00000020",
+                    "runtimeInSeconds": 976.417,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.441268+00:00"
+                },
+                {
+                    "id": "blastall_00000021",
+                    "runtimeInSeconds": 1500.205,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.441416+00:00"
+                },
+                {
+                    "id": "blastall_00000022",
+                    "runtimeInSeconds": 617.584,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.441566+00:00"
+                },
+                {
+                    "id": "blastall_00000023",
+                    "runtimeInSeconds": 978.248,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.441717+00:00"
+                },
+                {
+                    "id": "blastall_00000024",
+                    "runtimeInSeconds": 1118.126,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.441866+00:00"
+                },
+                {
+                    "id": "blastall_00000025",
+                    "runtimeInSeconds": 1269.399,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.442010+00:00"
+                },
+                {
+                    "id": "blastall_00000026",
+                    "runtimeInSeconds": 1724.554,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.442156+00:00"
+                },
+                {
+                    "id": "blastall_00000027",
+                    "runtimeInSeconds": 776.002,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.442306+00:00"
+                },
+                {
+                    "id": "blastall_00000028",
+                    "runtimeInSeconds": 1359.604,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.442488+00:00"
+                },
+                {
+                    "id": "blastall_00000029",
+                    "runtimeInSeconds": 1473.156,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.442643+00:00"
+                },
+                {
+                    "id": "blastall_00000030",
+                    "runtimeInSeconds": 276.463,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.442793+00:00"
+                },
+                {
+                    "id": "blastall_00000031",
+                    "runtimeInSeconds": 1494.247,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.442941+00:00"
+                },
+                {
+                    "id": "blastall_00000032",
+                    "runtimeInSeconds": 702.789,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.443091+00:00"
+                },
+                {
+                    "id": "blastall_00000033",
+                    "runtimeInSeconds": 361.823,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.443304+00:00"
+                },
+                {
+                    "id": "blastall_00000034",
+                    "runtimeInSeconds": 1914.601,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.443512+00:00"
+                },
+                {
+                    "id": "blastall_00000035",
+                    "runtimeInSeconds": 1933.082,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.443721+00:00"
+                },
+                {
+                    "id": "blastall_00000036",
+                    "runtimeInSeconds": 1752.644,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.443885+00:00"
+                },
+                {
+                    "id": "blastall_00000037",
+                    "runtimeInSeconds": 1002.896,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.444037+00:00"
+                },
+                {
+                    "id": "blastall_00000038",
+                    "runtimeInSeconds": 485.935,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.444185+00:00"
+                },
+                {
+                    "id": "blastall_00000039",
+                    "runtimeInSeconds": 1597.323,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.444331+00:00"
+                },
+                {
+                    "id": "blastall_00000040",
+                    "runtimeInSeconds": 1243.724,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.444479+00:00"
+                },
+                {
+                    "id": "blastall_00000041",
+                    "runtimeInSeconds": 565.434,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.444653+00:00"
+                },
+                {
+                    "id": "cat_blast_00000042",
+                    "runtimeInSeconds": 6.306,
+                    "command": {
+                        "program": "cat_blast",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.444699+00:00"
+                },
+                {
+                    "id": "cat_00000043",
+                    "runtimeInSeconds": 0.002,
+                    "command": {
+                        "program": "cat",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.444734+00:00"
+                },
+                {
+                    "id": "blastall_00000044",
+                    "runtimeInSeconds": 1870.278,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.444922+00:00"
+                },
+                {
+                    "id": "blastall_00000045",
+                    "runtimeInSeconds": 909.577,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.445071+00:00"
+                },
+                {
+                    "id": "blastall_00000046",
+                    "runtimeInSeconds": 1568.756,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.445216+00:00"
+                },
+                {
+                    "id": "blastall_00000047",
+                    "runtimeInSeconds": 1016.701,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.445363+00:00"
+                },
+                {
+                    "id": "blastall_00000048",
+                    "runtimeInSeconds": 1368.363,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.445506+00:00"
+                },
+                {
+                    "id": "blastall_00000049",
+                    "runtimeInSeconds": 1407.754,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.445652+00:00"
+                },
+                {
+                    "id": "blastall_00000050",
+                    "runtimeInSeconds": 739.503,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.445800+00:00"
+                },
+                {
+                    "id": "blastall_00000051",
+                    "runtimeInSeconds": 1937.42,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.445946+00:00"
+                },
+                {
+                    "id": "blastall_00000052",
+                    "runtimeInSeconds": 1712.277,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.446090+00:00"
+                },
+                {
+                    "id": "blastall_00000053",
+                    "runtimeInSeconds": 1904.17,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.446235+00:00"
+                },
+                {
+                    "id": "blastall_00000054",
+                    "runtimeInSeconds": 1853.802,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.446381+00:00"
+                },
+                {
+                    "id": "blastall_00000055",
+                    "runtimeInSeconds": 1480.833,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.446525+00:00"
+                },
+                {
+                    "id": "blastall_00000056",
+                    "runtimeInSeconds": 1884.444,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.446667+00:00"
+                },
+                {
+                    "id": "blastall_00000057",
+                    "runtimeInSeconds": 453.438,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.446843+00:00"
+                },
+                {
+                    "id": "blastall_00000058",
+                    "runtimeInSeconds": 767.042,
+                    "command": {
+                        "program": "blastall",
+                        "arguments": []
+                    },
+                    "coreCount": 1,
+                    "executedAt": "2026-06-20T18:36:22.447000+00:00"
+                }
+            ]
+        }
+    },
+    "runtimeSystem": {
+        "name": "WfCommons",
+        "version": "1.4",
+        "url": "https://docs.wfcommons.org/en/v1.4/"
+    }
+}
