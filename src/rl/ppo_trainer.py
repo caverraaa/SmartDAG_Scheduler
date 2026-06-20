@@ -93,4 +93,4 @@ class PPOTrainer:
         torch.save(self.policy.state_dict(), path)
 
     def load_checkpoint(self, path: str) -> None:
-        self.policy.load_state_dict(torch.load(path))
+        self.policy.load_state_dict(torch.load(path, weights_only=True))
