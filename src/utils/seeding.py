@@ -1,6 +1,6 @@
 """Isolated RNG helpers (never touch global numpy state)."""
 
-import zlib
+import hashlib
 
 import numpy as np
 
@@ -17,5 +17,5 @@ def derive_rng(seed: int, salt: str) -> np.random.Generator:
     salt's stream, so toggling one concern (e.g. noise) cannot perturb another's
     draws or the base DAG/cluster-generation stream.
     """
-    sub = zlib.crc32(salt.encode("utf-8"))
+    sub = int.from_bytes(hashlib.sha256(salt.encode("utf-8")).digest()[:8], "little")
     return np.random.default_rng(np.random.SeedSequence([seed, sub]))

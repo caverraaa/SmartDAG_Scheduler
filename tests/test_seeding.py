@@ -25,3 +25,9 @@ def test_derive_rng_does_not_consume_base_stream() -> None:
 
 def test_derive_rng_returns_generator() -> None:
     assert isinstance(derive_rng(1, "x"), np.random.Generator)
+
+
+def test_derive_rng_different_seeds_differ() -> None:
+    a = derive_rng(0, "x").random(5)
+    b = derive_rng(1, "x").random(5)
+    assert not np.array_equal(a, b)
