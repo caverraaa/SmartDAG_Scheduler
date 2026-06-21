@@ -52,41 +52,49 @@ def _build_val_instances(cfg: Config) -> list[Instance]:
     return insts
 
 
-def _baselines(val: list[Instance], cfg: Config) -> list[tuple[float, float, float]]:
-    """Per-instance (HEFT makespan, HEFT balance, Random balance) on the clean env, once."""
+def _baselines(val: list[Instance], cfg: Config) -> list[tuple[float, float, float, float]]:
+    """Per-instance (HEFT makespan, HEFT energy, HEFT balance, Random balance), clean env, once."""
     clean = dataclasses.replace(cfg, noise_std=0.0, failure_rate=0.0)
     env = ClusterEnv(clean)
     heft, rnd = HEFTStrategy(), RandomStrategy(make_rng(0))
-    out: list[tuple[float, float, float]] = []
+    out: list[tuple[float, float, float, float]] = []
     for dag, nodes in val:
         ids = [n.node_id for n in nodes]
         hs, _ = run_episode(env, heft, dag=dag, nodes=nodes)
         ns, _ = run_episode(env, rnd, dag=dag, nodes=nodes)
-        out.append((hs.makespan(), hs.load_balance_index(ids), ns.load_balance_index(ids)))
+        out.append(
+            (hs.makespan(), hs.total_energy, hs.load_balance_index(ids), ns.load_balance_index(ids))
+        )
     return out
 
 
 def _validate_rl(
     policy: TwoHeadPolicy,
     val: list[Instance],
-    baselines: list[tuple[float, float, float]],
+    baselines: list[tuple[float, float, float, float]],
     cfg: Config,
 ) -> dict[str, float]:
-    """Frozen-policy eval-vs-HEFT (TZ §9): mean makespan ratio + balance vs HEFT/Random."""
+    """Frozen-policy eval-vs-HEFT (TZ §9): mean makespan AND energy ratio + balance.
+
+    Energy is half the structural claim, so it is tracked live alongside makespan/balance
+    to catch a balance-via-high-wattage regression during training, not at final eval.
+    """
     clean = dataclasses.replace(cfg, noise_std=0.0, failure_rate=0.0)
     env = ClusterEnv(clean)
     rl = RLStrategy(policy)
-    ratios, rl_bal = [], []
-    for (dag, nodes), (h_mk, _, _) in zip(val, baselines, strict=True):
+    mk_ratios, en_ratios, rl_bal = [], [], []
+    for (dag, nodes), (h_mk, h_en, _, _) in zip(val, baselines, strict=True):
         ids = [n.node_id for n in nodes]
         rs, _ = run_episode(env, rl, dag=dag, nodes=nodes)
-        ratios.append(rs.makespan() / h_mk if h_mk > 0 else float("inf"))
+        mk_ratios.append(rs.makespan() / h_mk if h_mk > 0 else float("inf"))
+        en_ratios.append(rs.total_energy / h_en if h_en > 0 else float("inf"))
         rl_bal.append(rs.load_balance_index(ids))
     return {
-        "mk_ratio_vs_heft": statistics.mean(ratios),
+        "mk_ratio_vs_heft": statistics.mean(mk_ratios),
+        "energy_ratio_vs_heft": statistics.mean(en_ratios),
         "rl_balance": statistics.mean(rl_bal),
-        "heft_balance": statistics.mean([b[1] for b in baselines]),
-        "random_balance": statistics.mean([b[2] for b in baselines]),
+        "heft_balance": statistics.mean([b[2] for b in baselines]),
+        "random_balance": statistics.mean([b[3] for b in baselines]),
     }
 
 
@@ -125,9 +133,10 @@ def cmd_train(seed: int, config_path: str = "config.yaml") -> str:
                 trainer.save_checkpoint(ckpt)  # keep BEST by val makespan ratio, not last
             print(
                 f"[seed{seed}] upd {done}/{cfg.total_updates} "
-                f"mk/HEFT={v['mk_ratio_vs_heft']:.2f} rl_bal={v['rl_balance']:.3f} "
-                f"(rand {v['random_balance']:.3f}, heft {v['heft_balance']:.3f}) "
-                f"ent_coef={chunk[-1]['entropy_coef']:.3f} reward={chunk[-1]['mean_reward']:.2f}"
+                f"mk/HEFT={v['mk_ratio_vs_heft']:.2f} en/HEFT={v['energy_ratio_vs_heft']:.2f} "
+                f"rl_bal={v['rl_balance']:.3f} (rand {v['random_balance']:.3f}, "
+                f"heft {v['heft_balance']:.3f}) ent_coef={chunk[-1]['entropy_coef']:.3f} "
+                f"reward={chunk[-1]['mean_reward']:.2f}"
             )
         if best_ratio == float("inf"):
             trainer.save_checkpoint(ckpt)
