@@ -133,6 +133,12 @@ def cmd_train(seed: int, config_path: str = "config.yaml") -> str:
     env = ClusterEnv(cfg)
     ckpt = os.path.join("models", f"rl_seed{seed}.pth")
     os.makedirs("models", exist_ok=True)
+    results_dir = load_eval_config(config_path).results_dir
+    os.makedirs(results_dir, exist_ok=True)
+    hist_path = os.path.join(results_dir, f"train_history_seed{seed}.csv")
+    # Start clean: never leave a stale prior-run curve in place while this run warms up.
+    if os.path.exists(hist_path):
+        os.remove(hist_path)
     history: list[dict] = []
 
     if cfg.eval_interval and cfg.eval_interval > 0:
@@ -146,6 +152,9 @@ def cmd_train(seed: int, config_path: str = "config.yaml") -> str:
             done += k
             v = _validate_rl(policy, val, baselines, cfg)
             history.append({"update": done, **chunk[-1], **v})
+            # Write the Pareto curve INCREMENTALLY each interval: live half-budget reads,
+            # crash-resilient, and overwrites any stale file at the first eval point.
+            pd.DataFrame(history).to_csv(hist_path, index=False)
             if v["val_objective"] > best_objective:
                 best_objective = v["val_objective"]
                 trainer.save_checkpoint(ckpt)  # keep BEST by multi-criteria objective, not last
@@ -153,20 +162,16 @@ def cmd_train(seed: int, config_path: str = "config.yaml") -> str:
                 f"[seed{seed}] upd {done}/{cfg.total_updates} obj={v['val_objective']:.3f} "
                 f"mk/HEFT={v['mk_ratio_vs_heft']:.2f} en/HEFT={v['energy_ratio_vs_heft']:.2f} "
                 f"rl_bal={v['rl_balance']:.3f} (rand {v['random_balance']:.3f}, "
-                f"heft {v['heft_balance']:.3f}) ent_coef={chunk[-1]['entropy_coef']:.3f} "
-                f"reward={chunk[-1]['mean_reward']:.2f}"
+                f"heft {v['heft_balance']:.3f}) ent={chunk[-1]['entropy']:.2f} "
+                f"ent_coef={chunk[-1]['entropy_coef']:.3f} reward={chunk[-1]['mean_reward']:.2f}",
+                flush=True,
             )
         if best_objective == float("-inf"):
             trainer.save_checkpoint(ckpt)
     else:
         history = trainer.train(env, n_updates=cfg.total_updates)
         trainer.save_checkpoint(ckpt)
-
-    results_dir = load_eval_config(config_path).results_dir
-    os.makedirs(results_dir, exist_ok=True)
-    pd.DataFrame(history).to_csv(
-        os.path.join(results_dir, f"train_history_seed{seed}.csv"), index=False
-    )
+        pd.DataFrame(history).to_csv(hist_path, index=False)
     return ckpt
 
 
