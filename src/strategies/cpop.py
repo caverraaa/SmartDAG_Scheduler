@@ -51,8 +51,10 @@ class CPOPStrategy(BaseSchedulingStrategy):
     def predict(self, ready: list[int], state: ClusterState) -> tuple[int, int]:
         priority, cp, cp_proc = self._structure(state)
         task_id = max(ready, key=lambda t: (priority[t], -t))  # highest priority, then lowest id
-        if task_id in cp:
+        if task_id in cp and state.nodes[cp_proc].alive:
             return task_id, cp_proc
+        # Non-CP task, or the critical-path processor has failed: place via EFT on a
+        # surviving node (the same reactive fallback every other strategy uses).
         task = state.dag.task(task_id)
         alive = [n for n in state.nodes if n.alive]
         node = min(alive, key=lambda n: (earliest_start_finish(task, n, state)[1], n.node_id))

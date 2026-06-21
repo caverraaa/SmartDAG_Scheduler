@@ -1,0 +1,55 @@
+# Reward weights (TZ §6.4)
+w1: 1.0   # makespan
+w2: 0.3   # energy
+w3: 0.2   # terminal load-balance
+
+# Instance generation
+seed: 0
+n_tasks: 30
+n_nodes: 8
+beta: 5.0        # heterogeneity factor (max/min speed ratio across node types)
+ccr: 0.5         # communication-to-computation ratio
+edge_prob: 0.4   # intra-layer-forward edge probability
+n_layers: 6
+
+# Stochasticity (deterministic in M1)
+noise_std: 0.0
+failure_rate: 0.0
+
+# RL / PPO (M3b). gamma is pinned to 1.0 in the trainer (telescoping reward).
+lr: 0.0003
+clip_eps: 0.2
+gae_lambda: 0.95
+ppo_epochs: 4
+minibatch_size: 32
+entropy_coef: 0.01
+value_coef: 0.5
+rollout_episodes: 8
+total_updates: 300
+max_grad_norm: 0.5
+gnn_hidden: 64
+gnn_layers: 2
+
+# WfCommons parser modeling constants (M5). Disclosed in thesis.
+wfcommons:
+  default_mem: 4.0          # mem_required when execution.memoryInBytes is absent
+  eps: 0.01                 # volume on a precedence edge that shares no file
+  bytes_to_unit: 1.0e-6     # file sizeInBytes -> cost-unit volume (preserves native CCR)
+  mem_min: 1.0              # rescale floor for mem_required (matches synthetic ~1-8)
+  mem_max: 8.0              # rescale ceiling for mem_required
+  memory_ref_bytes: 8.0e9   # memoryInBytes that maps to mem_max
+
+# M5 evaluation grid. Smoke-sized defaults; full thesis grid values in comments.
+eval:
+  noise_std: [0.0, 0.1, 0.2]
+  beta: [2.0, 5.0, 10.0]
+  failure_rate: 0.02         # per-unit-time hazard for the "failures: true" regime
+  failures: [false, true]
+  n_dags: 30                 # full thesis grid
+  dag_sizes: [20, 40, 60]    # sampled (round-robin) for held-out synthetic DAGs
+  n_nodes: 8
+  noise_seeds: [0, 1, 2, 3, 4]   # 5 noise seeds per DAG
+  dag_seed_base: 100000      # held-out stream offset (disjoint from training seeds)
+  benchmark_dir: dag_benchmarks
+  checkpoint_glob: models/rl_seed*.pth
+  results_dir: results

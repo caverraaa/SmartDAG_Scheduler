@@ -51,6 +51,19 @@ def test_cpop_full_schedule_golden() -> None:
     assert info["makespan"] == 6.0
 
 
+def test_cpop_avoids_dead_critical_path_processor() -> None:
+    """Under failures the cp_proc can die; CPOP must not assign CP tasks to a dead node."""
+    dag, nodes = _asym()  # cp = {0,1,3}, cp_proc = GPU node 1
+    env = ClusterEnv(load_config("config.yaml"))
+    env.reset(dag=dag, nodes=nodes)
+    env.state.nodes[1].alive = False  # kill the critical-path processor (GPU)
+    # Task 0 is on the critical path; with cp_proc dead, fall back to EFT over alive nodes.
+    task_id, node_id = CPOPStrategy().predict([0], env.state)
+    assert task_id == 0
+    assert env.state.nodes[node_id].alive  # never returns a dead node
+    assert node_id == 0  # only surviving node is CPU(0)
+
+
 def test_cpop_tie_break_selects_lowest_id() -> None:
     """Test that equal-priority tasks are resolved by lowest id, independent of input order."""
     # Two independent entry tasks with identical cost => equal priority
