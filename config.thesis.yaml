@@ -22,10 +22,10 @@ clip_eps: 0.2
 gae_lambda: 0.95
 ppo_epochs: 4
 minibatch_size: 32
-entropy_coef: 0.01
+entropy_coef: 0.05   # raised from 0.01: prevents the node-head collapse to FPGA-packing (confirmed)
 value_coef: 0.5
 rollout_episodes: 8
-total_updates: 300
+total_updates: 300   # bump to ~3000 for the long run once the short confirmation is accepted
 max_grad_norm: 0.5
 gnn_hidden: 64
 gnn_layers: 2
