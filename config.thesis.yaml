@@ -29,7 +29,7 @@ rollout_episodes: 8
 total_updates: 3000        # long run; watch the eval-vs-HEFT curve, not the endpoint
 # TZ §9 periodic frozen-policy eval-vs-HEFT during training (visible convergence curve):
 eval_interval: 50          # validate every 50 updates -> 60 points over the run
-n_val_dags: 5              # fixed validation DAGs (seed stream disjoint from train + eval grid)
+n_val_dags: 10             # fixed validation DAGs (disjoint stream); 10 to smooth curve noise
 val_seed_base: 50000
 max_grad_norm: 0.5
 gnn_hidden: 64

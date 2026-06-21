@@ -3,9 +3,12 @@
 import argparse
 import dataclasses
 import os
+import random
 import statistics
 
+import numpy as np
 import pandas as pd
+import torch
 
 from src.core.compute_node import ComputeNode
 from src.core.dag import TaskDAG
@@ -108,6 +111,12 @@ def cmd_train(seed: int, config_path: str = "config.yaml") -> str:
     """
     base = load_config(config_path)
     cfg = dataclasses.replace(base, seed=seed)
+    # Reproducibility (invariant #6): --seed must drive torch (policy init + action
+    # sampling) and the global numpy/random streams, not just the env's isolated RNGs.
+    # (PYTHONHASHSEED must be exported before launch; it cannot be set from here.)
+    torch.manual_seed(seed)
+    np.random.seed(seed)
+    random.seed(seed)
     policy = TwoHeadPolicy(
         GNNEncoder(hidden=cfg.gnn_hidden, layers=cfg.gnn_layers), hidden=cfg.gnn_hidden
     )
@@ -165,6 +174,11 @@ def cmd_eval(config_path: str = "config.yaml") -> None:
 
 
 def main(argv: list[str] | None = None) -> None:
+    # Cap torch's thread pools so parallel per-seed processes don't oversubscribe cores
+    # (the simulator is GIL-bound; parallelism comes from processes, not torch threads).
+    _threads = os.environ.get("TORCH_NUM_THREADS")
+    if _threads:
+        torch.set_num_threads(int(_threads))
     parser = argparse.ArgumentParser(description="SmartDAG Scheduler train/eval CLI.")
     parser.add_argument("--config", default="config.yaml")
     sub = parser.add_subparsers(dest="command", required=True)
