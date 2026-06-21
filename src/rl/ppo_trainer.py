@@ -23,6 +23,16 @@ class PPOTrainer:
         self.policy = policy
         self.config = config
         self.optimizer = Adam(policy.parameters(), lr=config.lr)
+        self._global_update = 0  # persists across chunked train() calls (for entropy annealing)
+
+    def current_entropy_coef(self) -> float:
+        """Linearly anneal entropy_coef -> entropy_coef_final over total_updates.
+
+        Explore early, commit late. Constant when entropy_coef_final == entropy_coef.
+        """
+        start, final = self.config.entropy_coef, self.config.entropy_coef_final
+        frac = min(1.0, self._global_update / max(1, self.config.total_updates - 1))
+        return start + frac * (final - start)
 
     def update(self, buffer: RolloutBuffer) -> dict[str, float]:
         if buffer.advantages is None or buffer.returns is None:
@@ -34,6 +44,7 @@ class PPOTrainer:
         returns = torch.tensor(buffer.returns, dtype=torch.float32)
         old_log_probs = torch.tensor([tr.log_prob for tr in buffer.transitions])
 
+        ent_coef = self.current_entropy_coef()
         totals = {"policy_loss": 0.0, "value_loss": 0.0, "entropy": 0.0, "total_loss": 0.0}
         n_batches = 0
         for _epoch in range(cfg.ppo_epochs):
@@ -60,7 +71,7 @@ class PPOTrainer:
                 policy_loss = policy_loss / mb
                 value_loss = value_loss / mb
                 entropy_mean = entropy_sum / mb
-                total = policy_loss + cfg.value_coef * value_loss - cfg.entropy_coef * entropy_mean
+                total = policy_loss + cfg.value_coef * value_loss - ent_coef * entropy_mean
                 total.backward()
                 clip_grad_norm_(self.policy.parameters(), cfg.max_grad_norm)
                 self.optimizer.step()
@@ -69,7 +80,10 @@ class PPOTrainer:
                 totals["entropy"] += entropy_mean.item()
                 totals["total_loss"] += total.item()
                 n_batches += 1
-        return {k: v / n_batches for k, v in totals.items()}
+        result = {k: v / n_batches for k, v in totals.items()}
+        result["entropy_coef"] = ent_coef
+        self._global_update += 1
+        return result
 
     def collect_rollouts(
         self,

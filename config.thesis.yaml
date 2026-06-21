@@ -22,10 +22,15 @@ clip_eps: 0.2
 gae_lambda: 0.95
 ppo_epochs: 4
 minibatch_size: 32
-entropy_coef: 0.05   # raised from 0.01: prevents the node-head collapse to FPGA-packing (confirmed)
+entropy_coef: 0.1          # annealing START (explore early)
+entropy_coef_final: 0.02   # annealing END (commit late); linear over total_updates
 value_coef: 0.5
 rollout_episodes: 8
-total_updates: 300   # bump to ~3000 for the long run once the short confirmation is accepted
+total_updates: 3000        # long run; watch the eval-vs-HEFT curve, not the endpoint
+# TZ §9 periodic frozen-policy eval-vs-HEFT during training (visible convergence curve):
+eval_interval: 50          # validate every 50 updates -> 60 points over the run
+n_val_dags: 5              # fixed validation DAGs (seed stream disjoint from train + eval grid)
+val_seed_base: 50000
 max_grad_norm: 0.5
 gnn_hidden: 64
 gnn_layers: 2

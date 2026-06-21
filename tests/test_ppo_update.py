@@ -78,4 +78,38 @@ def test_update_returns_expected_keys() -> None:
     cfg, policy, env, dag, nodes = _setup()
     buf = _collect_one_episode(policy, env, dag, nodes)
     stats = PPOTrainer(policy, cfg).update(buf)
-    assert set(stats) == {"policy_loss", "value_loss", "entropy", "total_loss"}
+    assert set(stats) == {"policy_loss", "value_loss", "entropy", "total_loss", "entropy_coef"}
+
+
+def test_entropy_coef_anneals_start_to_final() -> None:
+    """current_entropy_coef linearly decays entropy_coef -> entropy_coef_final over the budget."""
+    import dataclasses
+
+    from src.rl.gnn_encoder import GNNEncoder
+    from src.rl.policy import TwoHeadPolicy
+    from src.rl.ppo_trainer import PPOTrainer
+    from src.utils.config import load_config
+
+    cfg = dataclasses.replace(
+        load_config("config.yaml"), entropy_coef=0.1, entropy_coef_final=0.02, total_updates=11
+    )
+    tr = PPOTrainer(TwoHeadPolicy(GNNEncoder(hidden=8, layers=2), hidden=8), cfg)
+    assert tr.current_entropy_coef() == 0.1  # update 0 -> start
+    tr._global_update = 10  # last update (total_updates-1) -> final
+    assert abs(tr.current_entropy_coef() - 0.02) < 1e-9
+    tr._global_update = 5  # midpoint -> halfway
+    assert abs(tr.current_entropy_coef() - 0.06) < 1e-9
+
+
+def test_constant_entropy_when_no_final() -> None:
+    """Absent entropy_coef_final (== entropy_coef) => no annealing (constant)."""
+    from src.rl.gnn_encoder import GNNEncoder
+    from src.rl.policy import TwoHeadPolicy
+    from src.rl.ppo_trainer import PPOTrainer
+    from src.utils.config import load_config
+
+    cfg = load_config("config.yaml")  # entropy_coef_final defaults to entropy_coef
+    tr = PPOTrainer(TwoHeadPolicy(GNNEncoder(hidden=8, layers=2), hidden=8), cfg)
+    first = tr.current_entropy_coef()
+    tr._global_update = cfg.total_updates - 1
+    assert tr.current_entropy_coef() == first  # constant across the run

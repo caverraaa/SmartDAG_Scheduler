@@ -3,10 +3,15 @@
 import argparse
 import dataclasses
 import os
+import statistics
 
 import pandas as pd
 
+from src.core.compute_node import ComputeNode
+from src.core.dag import TaskDAG
+from src.dag_factory.factory import DAGFactory
 from src.env.cluster_env import ClusterEnv
+from src.env.cluster_factory import make_cluster
 from src.eval.eval_config import load_eval_config
 from src.eval.evaluate import (
     compare_significance,
@@ -19,11 +24,80 @@ from src.eval.evaluate import (
 from src.rl.gnn_encoder import GNNEncoder
 from src.rl.policy import TwoHeadPolicy
 from src.rl.ppo_trainer import PPOTrainer
-from src.utils.config import load_config
+from src.rl.rl_strategy import RLStrategy
+from src.scheduler.task_scheduler import run_episode
+from src.strategies.heft import HEFTStrategy
+from src.strategies.random_strategy import RandomStrategy
+from src.utils.config import Config, load_config
+from src.utils.seeding import derive_rng, make_rng
+
+Instance = tuple[TaskDAG, list[ComputeNode]]
+
+
+def _build_val_instances(cfg: Config) -> list[Instance]:
+    """Fixed validation set from a dedicated seed stream (disjoint from train + eval grid)."""
+    insts: list[Instance] = []
+    for k in range(cfg.n_val_dags):
+        s = cfg.val_seed_base + k
+        dag = DAGFactory.create(
+            "synthetic",
+            make_rng(s),
+            n_tasks=cfg.n_tasks,
+            n_layers=cfg.n_layers,
+            edge_prob=cfg.edge_prob,
+            ccr=cfg.ccr,
+        )
+        nodes = make_cluster(derive_rng(s, "val-cluster"), cfg.n_nodes, cfg.beta)
+        insts.append((dag, nodes))
+    return insts
+
+
+def _baselines(val: list[Instance], cfg: Config) -> list[tuple[float, float, float]]:
+    """Per-instance (HEFT makespan, HEFT balance, Random balance) on the clean env, once."""
+    clean = dataclasses.replace(cfg, noise_std=0.0, failure_rate=0.0)
+    env = ClusterEnv(clean)
+    heft, rnd = HEFTStrategy(), RandomStrategy(make_rng(0))
+    out: list[tuple[float, float, float]] = []
+    for dag, nodes in val:
+        ids = [n.node_id for n in nodes]
+        hs, _ = run_episode(env, heft, dag=dag, nodes=nodes)
+        ns, _ = run_episode(env, rnd, dag=dag, nodes=nodes)
+        out.append((hs.makespan(), hs.load_balance_index(ids), ns.load_balance_index(ids)))
+    return out
+
+
+def _validate_rl(
+    policy: TwoHeadPolicy,
+    val: list[Instance],
+    baselines: list[tuple[float, float, float]],
+    cfg: Config,
+) -> dict[str, float]:
+    """Frozen-policy eval-vs-HEFT (TZ §9): mean makespan ratio + balance vs HEFT/Random."""
+    clean = dataclasses.replace(cfg, noise_std=0.0, failure_rate=0.0)
+    env = ClusterEnv(clean)
+    rl = RLStrategy(policy)
+    ratios, rl_bal = [], []
+    for (dag, nodes), (h_mk, _, _) in zip(val, baselines, strict=True):
+        ids = [n.node_id for n in nodes]
+        rs, _ = run_episode(env, rl, dag=dag, nodes=nodes)
+        ratios.append(rs.makespan() / h_mk if h_mk > 0 else float("inf"))
+        rl_bal.append(rs.load_balance_index(ids))
+    return {
+        "mk_ratio_vs_heft": statistics.mean(ratios),
+        "rl_balance": statistics.mean(rl_bal),
+        "heft_balance": statistics.mean([b[1] for b in baselines]),
+        "random_balance": statistics.mean([b[2] for b in baselines]),
+    }
 
 
 def cmd_train(seed: int, config_path: str = "config.yaml") -> str:
-    """Train one model on sampled instances; save checkpoint + history CSV."""
+    """Train one model on sampled instances; save the BEST checkpoint + a curve CSV.
+
+    With eval_interval > 0, every eval_interval updates the frozen policy is evaluated
+    vs HEFT on a fixed validation set (makespan ratio + balance), logged to the history
+    CSV, and the checkpoint with the best makespan ratio is kept (TZ §9). Entropy is
+    annealed entropy_coef -> entropy_coef_final across the run by the trainer.
+    """
     base = load_config(config_path)
     cfg = dataclasses.replace(base, seed=seed)
     policy = TwoHeadPolicy(
@@ -31,9 +105,36 @@ def cmd_train(seed: int, config_path: str = "config.yaml") -> str:
     )
     trainer = PPOTrainer(policy, cfg)
     env = ClusterEnv(cfg)
-    history = trainer.train(env, n_updates=cfg.total_updates)  # dag=None => sampled instances
     ckpt = os.path.join("models", f"rl_seed{seed}.pth")
-    trainer.save_checkpoint(ckpt)
+    os.makedirs("models", exist_ok=True)
+    history: list[dict] = []
+
+    if cfg.eval_interval and cfg.eval_interval > 0:
+        val = _build_val_instances(cfg)
+        baselines = _baselines(val, cfg)
+        best_ratio = float("inf")
+        done = 0
+        while done < cfg.total_updates:
+            k = min(cfg.eval_interval, cfg.total_updates - done)
+            chunk = trainer.train(env, n_updates=k)  # dag=None => sampled instances
+            done += k
+            v = _validate_rl(policy, val, baselines, cfg)
+            history.append({"update": done, **chunk[-1], **v})
+            if v["mk_ratio_vs_heft"] < best_ratio:
+                best_ratio = v["mk_ratio_vs_heft"]
+                trainer.save_checkpoint(ckpt)  # keep BEST by val makespan ratio, not last
+            print(
+                f"[seed{seed}] upd {done}/{cfg.total_updates} "
+                f"mk/HEFT={v['mk_ratio_vs_heft']:.2f} rl_bal={v['rl_balance']:.3f} "
+                f"(rand {v['random_balance']:.3f}, heft {v['heft_balance']:.3f}) "
+                f"ent_coef={chunk[-1]['entropy_coef']:.3f} reward={chunk[-1]['mean_reward']:.2f}"
+            )
+        if best_ratio == float("inf"):
+            trainer.save_checkpoint(ckpt)
+    else:
+        history = trainer.train(env, n_updates=cfg.total_updates)
+        trainer.save_checkpoint(ckpt)
+
     results_dir = load_eval_config(config_path).results_dir
     os.makedirs(results_dir, exist_ok=True)
     pd.DataFrame(history).to_csv(
