@@ -85,19 +85,28 @@ def _validate_rl(
     clean = dataclasses.replace(cfg, noise_std=0.0, failure_rate=0.0)
     env = ClusterEnv(clean)
     rl = RLStrategy(policy)
-    mk_ratios, en_ratios, rl_bal = [], [], []
+    mk_ratios, en_ratios, rl_bal, objective = [], [], [], []
     for (dag, nodes), (h_mk, h_en, _, _) in zip(val, baselines, strict=True):
         ids = [n.node_id for n in nodes]
-        rs, _ = run_episode(env, rl, dag=dag, nodes=nodes)
+        rs, info = run_episode(env, rl, dag=dag, nodes=nodes)
         mk_ratios.append(rs.makespan() / h_mk if h_mk > 0 else float("inf"))
         en_ratios.append(rs.total_energy / h_en if h_en > 0 else float("inf"))
-        rl_bal.append(rs.load_balance_index(ids))
+        bal = rs.load_balance_index(ids)
+        rl_bal.append(bal)
+        # The agent's own multi-criteria objective (higher = better) = the training reward
+        # shape: -(w1*mk/Mref + w2*en/Eref) + w3*balance. Used to pick the BEST checkpoint
+        # so we keep the Pareto-best policy, not the makespan-only-best one.
+        objective.append(
+            -(cfg.w1 * rs.makespan() / info["m_ref"] + cfg.w2 * rs.total_energy / info["e_ref"])
+            + cfg.w3 * bal
+        )
     return {
         "mk_ratio_vs_heft": statistics.mean(mk_ratios),
         "energy_ratio_vs_heft": statistics.mean(en_ratios),
         "rl_balance": statistics.mean(rl_bal),
         "heft_balance": statistics.mean([b[2] for b in baselines]),
         "random_balance": statistics.mean([b[3] for b in baselines]),
+        "val_objective": statistics.mean(objective),
     }
 
 
@@ -129,7 +138,7 @@ def cmd_train(seed: int, config_path: str = "config.yaml") -> str:
     if cfg.eval_interval and cfg.eval_interval > 0:
         val = _build_val_instances(cfg)
         baselines = _baselines(val, cfg)
-        best_ratio = float("inf")
+        best_objective = float("-inf")
         done = 0
         while done < cfg.total_updates:
             k = min(cfg.eval_interval, cfg.total_updates - done)
@@ -137,17 +146,17 @@ def cmd_train(seed: int, config_path: str = "config.yaml") -> str:
             done += k
             v = _validate_rl(policy, val, baselines, cfg)
             history.append({"update": done, **chunk[-1], **v})
-            if v["mk_ratio_vs_heft"] < best_ratio:
-                best_ratio = v["mk_ratio_vs_heft"]
-                trainer.save_checkpoint(ckpt)  # keep BEST by val makespan ratio, not last
+            if v["val_objective"] > best_objective:
+                best_objective = v["val_objective"]
+                trainer.save_checkpoint(ckpt)  # keep BEST by multi-criteria objective, not last
             print(
-                f"[seed{seed}] upd {done}/{cfg.total_updates} "
+                f"[seed{seed}] upd {done}/{cfg.total_updates} obj={v['val_objective']:.3f} "
                 f"mk/HEFT={v['mk_ratio_vs_heft']:.2f} en/HEFT={v['energy_ratio_vs_heft']:.2f} "
                 f"rl_bal={v['rl_balance']:.3f} (rand {v['random_balance']:.3f}, "
                 f"heft {v['heft_balance']:.3f}) ent_coef={chunk[-1]['entropy_coef']:.3f} "
                 f"reward={chunk[-1]['mean_reward']:.2f}"
             )
-        if best_ratio == float("inf"):
+        if best_objective == float("-inf"):
             trainer.save_checkpoint(ckpt)
     else:
         history = trainer.train(env, n_updates=cfg.total_updates)
