@@ -90,3 +90,35 @@ def test_summarize_and_significance_and_write(tmp_path) -> None:
 
     for fname in ["eval_runs.csv", "eval_summary.csv", "eval_significance.csv"]:
         assert os.path.exists(os.path.join(str(tmp_path), fname))
+
+
+def test_summarize_excludes_deadlocked_and_reports_completion_rate() -> None:
+    """Deadlocked episodes must not pollute metric means; completion_rate tracks them."""
+    import pandas as pd
+
+    from src.eval.evaluate import summarize
+
+    def _row(dag_label: str, makespan: float, completed: bool) -> dict:
+        return {
+            "makespan": makespan,
+            "energy": makespan * 10,
+            "utilisation": 0.5,
+            "load_balance": 0.5,
+            "slr": 1.0,
+            "speedup": 1.0,
+            "overhead_ms": 0.0,
+            "noise_std": 0.1,
+            "beta": 5.0,
+            "failures": True,
+            "dag_label": dag_label,
+            "noise_seed": 0,
+            "strategy": "heft",
+            "completed": completed,
+        }
+
+    # Two completed runs (makespan 10) + one deadlocked truncated run (makespan 1).
+    df = pd.DataFrame([_row("d0", 10.0, True), _row("d1", 10.0, True), _row("d2", 1.0, False)])
+    out = summarize(df)
+    row = out[out.strategy == "heft"].iloc[0]
+    assert row["makespan_mean"] == 10.0  # truncated makespan=1.0 excluded
+    assert row["completion_rate"] == 2 / 3  # 2 of 3 episodes completed

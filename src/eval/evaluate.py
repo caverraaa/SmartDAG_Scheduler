@@ -114,6 +114,10 @@ def run_grid(
                             metrics = compute_run_metrics(
                                 schedule, info, dag, nodes, alive_ids, timed.predict_seconds
                             )
+                            # An episode that deadlocked (a ready task with no surviving node)
+                            # records a TRUNCATED schedule; flag it so metrics can exclude it
+                            # instead of treating the partial makespan as a real result.
+                            completed = len(env.scheduled) == dag.n_tasks
                             rows.append(
                                 {
                                     **metrics,
@@ -123,6 +127,8 @@ def run_grid(
                                     "dag_label": dag_label,
                                     "noise_seed": noise_seed,
                                     "strategy": name,
+                                    "completed": completed,
+                                    "n_scheduled": len(env.scheduled),
                                 }
                             )
     return pd.DataFrame(rows)
@@ -144,15 +150,27 @@ _METRIC_COLS = [
 _REGIME_COLS = ["noise_std", "beta", "failures"]
 
 
+def _completed_only(df: pd.DataFrame) -> pd.DataFrame:
+    """Rows whose episode finished all tasks; deadlocked runs are excluded from metrics."""
+    return df[df["completed"]] if "completed" in df.columns else df
+
+
 def summarize(df: pd.DataFrame) -> pd.DataFrame:
-    """Mean+std per (regime, strategy) for each metric, plus a robustness column."""
-    grouped = df.groupby([*_REGIME_COLS, "strategy"])
+    """Mean+std per (regime, strategy) for each metric (completed episodes only),
+    plus robustness and a completion_rate (fraction of episodes that finished)."""
+    completion = (
+        df.groupby([*_REGIME_COLS, "strategy"])["completed"].mean().reset_index()
+        if "completed" in df.columns
+        else None
+    )
+    done = _completed_only(df)
+    grouped = done.groupby([*_REGIME_COLS, "strategy"])
     summary = grouped[_METRIC_COLS].agg(["mean", "std"])
     summary.columns = [f"{metric}_{stat}" for metric, stat in summary.columns]
     summary = summary.reset_index()
-    # robustness = mean over instances of (makespan std across noise seeds).
+    # robustness = mean over instances of (makespan std across noise seeds), completed only.
     per_instance = (
-        df.groupby([*_REGIME_COLS, "strategy", "dag_label"])["makespan"].std().reset_index()
+        done.groupby([*_REGIME_COLS, "strategy", "dag_label"])["makespan"].std().reset_index()
     )
     robustness = (
         per_instance.groupby([*_REGIME_COLS, "strategy"])["makespan"]
@@ -160,13 +178,25 @@ def summarize(df: pd.DataFrame) -> pd.DataFrame:
         .reset_index()
         .rename(columns={"makespan": "robustness"})
     )
-    return summary.merge(robustness, on=[*_REGIME_COLS, "strategy"], how="left")
+    summary = summary.merge(robustness, on=[*_REGIME_COLS, "strategy"], how="left")
+    if completion is not None:
+        summary = summary.merge(
+            completion.rename(columns={"completed": "completion_rate"}),
+            on=[*_REGIME_COLS, "strategy"],
+            how="outer",
+        )
+    return summary
 
 
 def compare_significance(df: pd.DataFrame) -> pd.DataFrame:
-    """Per regime, each rl@* vs each non-RL baseline, paired on (dag_label, noise_seed)."""
+    """Per regime, each rl@* vs each non-RL baseline, paired on (dag_label, noise_seed).
+
+    Pairs over completed episodes only, so a deadlocked truncated makespan never
+    enters the significance test.
+    """
     from src.eval.significance import paired_wilcoxon
 
+    df = _completed_only(df)
     rl_names = sorted({s for s in df["strategy"].unique() if s.startswith("rl@")})
     baseline_names = sorted({s for s in df["strategy"].unique() if not s.startswith("rl@")})
     rows: list[dict] = []
@@ -221,8 +251,10 @@ def print_tables(summary: pd.DataFrame, significance: pd.DataFrame) -> None:
             "speedup_mean",
             "overhead_ms_mean",
             "robustness",
+            "completion_rate",
         ]
-        print(sub[cols].to_string(index=False))
+        present = [c for c in cols if c in sub.columns]
+        print(sub[present].to_string(index=False))
     if not significance.empty:
         print("\n=== RL vs baselines (Wilcoxon paired on makespan) ===")
         print(significance.to_string(index=False))

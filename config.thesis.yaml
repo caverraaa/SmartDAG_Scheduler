@@ -43,7 +43,7 @@ wfcommons:
 eval:
   noise_std: [0.0, 0.1, 0.2]
   beta: [2.0, 5.0, 10.0]
-  failure_rate: 0.02         # per-unit-time hazard for the "failures: true" regime
+  failure_rate: 0.002        # per-unit-time hazard for "failures: true" (low: episodes mostly complete)
   failures: [false, true]
   n_dags: 30                 # full thesis grid
   dag_sizes: [20, 40, 60]    # sampled (round-robin) for held-out synthetic DAGs
